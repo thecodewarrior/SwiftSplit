@@ -1,0 +1,56 @@
+PODS:
+  - CNIOAtomics (1.13.0)
+  - CNIODarwin (1.13.0)
+  - CNIOHTTPParser (1.13.0)
+  - CNIOLinux (1.13.0)
+  - CNIOSHA1 (1.13.0)
+  - CNIOZlib (1.13.0)
+  - SwiftNIO (1.13.0):
+    - CNIOAtomics (= 1.13.0)
+    - CNIODarwin (= 1.13.0)
+    - CNIOLinux (= 1.13.0)
+    - CNIOSHA1 (= 1.13.0)
+    - SwiftNIOConcurrencyHelpers (= 1.13.0)
+  - SwiftNIOConcurrencyHelpers (1.13.0):
+    - CNIOAtomics (= 1.13.0)
+  - SwiftNIOHTTP1 (1.13.0):
+    - CNIOHTTPParser (= 1.13.0)
+    - CNIOZlib (= 1.13.0)
+    - SwiftNIO (= 1.13.0)
+    - SwiftNIOConcurrencyHelpers (= 1.13.0)
+  - SwiftNIOWebSocket (1.13.0):
+    - CNIOSHA1 (= 1.13.0)
+    - SwiftNIO (= 1.13.0)
+    - SwiftNIOHTTP1 (= 1.13.0)
+
+DEPENDENCIES:
+  - SwiftNIOWebSocket (~> 1.13)
+
+SPEC REPOS:
+  trunk:
+    - CNIOAtomics
+    - CNIODarwin
+    - CNIOHTTPParser
+    - CNIOLinux
+    - CNIOSHA1
+    - CNIOZlib
+    - SwiftNIO
+    - SwiftNIOConcurrencyHelpers
+    - SwiftNIOHTTP1
+    - SwiftNIOWebSocket
+
+SPEC CHECKSUMS:
+  CNIOAtomics: ebb029bc0545a8a985d379be8d99917ee5968c44
+  CNIODarwin: fe828e0fe7970f932ed7e1ffc5e76a9b24e1a8ea
+  CNIOHTTPParser: 7c56c34f52aa649d3f36c82d8079c93b74f332f4
+  CNIOLinux: 382fad86b59fa7470498621861cc9f670bfaf150
+  CNIOSHA1: 4c615a274717bdb27ba616405ff70c0e5d6f5e91
+  CNIOZlib: a03e1dea283d5348e90d569b86974b2843543259
+  SwiftNIO: df48d7b349f05a294019a11c49783411f29f9836
+  SwiftNIOConcurrencyHelpers: 7411dd902d37cb82ec5a86e6348ae539f1156840
+  SwiftNIOHTTP1: fc5ff95ed05c259f3ee773c27a6c94cf6aa447f8
+  SwiftNIOWebSocket: 0b4bdbcf61dc3602a9b868dc237d986981011e0e
+
+PODFILE CHECKSUM: 82e4910ae168984d4ed7dc52e567c8d25731fb3e
+
+COCOAPODS: 1.10.0

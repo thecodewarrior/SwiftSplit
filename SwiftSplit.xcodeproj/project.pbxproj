@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,9 +11,17 @@
 		CD7CDBE7256F5D0D002AE46F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBE6256F5D0D002AE46F /* ViewController.swift */; };
 		CD7CDBE9256F5D0F002AE46F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD7CDBE8256F5D0F002AE46F /* Assets.xcassets */; };
 		CD7CDBEC256F5D0F002AE46F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD7CDBEA256F5D0F002AE46F /* Main.storyboard */; };
+		CD7CDBFE256F5DFC002AE46F /* MemoryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBF8256F5DFC002AE46F /* MemoryScanner.swift */; };
+		CD7CDBFF256F5DFC002AE46F /* CelesteScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBF9256F5DFC002AE46F /* CelesteScanner.swift */; };
+		CD7CDC00256F5DFC002AE46F /* memory_scanner.c in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBFD256F5DFC002AE46F /* memory_scanner.c */; };
+		CD7CDC01256F5DFC002AE46F /* CelesteSplitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBFB256F5DFC002AE46F /* CelesteSplitter.swift */; };
+		CD7CDC03256F626D002AE46F /* LiveSplitServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDC02256F626D002AE46F /* LiveSplitServer.swift */; };
+		CD7CDC05256F7304002AE46F /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDC04256F7304002AE46F /* Server.swift */; };
+		DB56D9F05D0BC5B4DE4CECC8 /* Pods_SwiftSplit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF09341B2ECF29501B823DEC /* Pods_SwiftSplit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2557401E37458142957F7D9D /* Pods-SwiftSplit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSplit.debug.xcconfig"; path = "Target Support Files/Pods-SwiftSplit/Pods-SwiftSplit.debug.xcconfig"; sourceTree = "<group>"; };
 		CD7CDBE1256F5D0D002AE46F /* SwiftSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD7CDBE4256F5D0D002AE46F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD7CDBE6256F5D0D002AE46F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -21,6 +29,17 @@
 		CD7CDBEB256F5D0F002AE46F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CD7CDBED256F5D0F002AE46F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CD7CDBEE256F5D0F002AE46F /* SwiftSplit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftSplit.entitlements; sourceTree = "<group>"; };
+		CD7CDBF4256F5DDB002AE46F /* SwiftSplit-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftSplit-Bridging-Header.h"; sourceTree = "<group>"; };
+		CD7CDBF8256F5DFC002AE46F /* MemoryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryScanner.swift; sourceTree = "<group>"; };
+		CD7CDBF9256F5DFC002AE46F /* CelesteScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelesteScanner.swift; sourceTree = "<group>"; };
+		CD7CDBFA256F5DFC002AE46F /* memory_scanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = memory_scanner.h; sourceTree = "<group>"; };
+		CD7CDBFB256F5DFC002AE46F /* CelesteSplitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelesteSplitter.swift; sourceTree = "<group>"; };
+		CD7CDBFC256F5DFC002AE46F /* CelesteMemoryLayout.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CelesteMemoryLayout.md; sourceTree = "<group>"; };
+		CD7CDBFD256F5DFC002AE46F /* memory_scanner.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = memory_scanner.c; sourceTree = "<group>"; };
+		CD7CDC02256F626D002AE46F /* LiveSplitServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSplitServer.swift; sourceTree = "<group>"; };
+		CD7CDC04256F7304002AE46F /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
+		CF09341B2ECF29501B823DEC /* Pods_SwiftSplit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftSplit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1C15A185F4552F09EFE4D9D /* Pods-SwiftSplit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSplit.release.xcconfig"; path = "Target Support Files/Pods-SwiftSplit/Pods-SwiftSplit.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,17 +47,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB56D9F05D0BC5B4DE4CECC8 /* Pods_SwiftSplit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5501C7D80B4DC7DA7135B62A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2557401E37458142957F7D9D /* Pods-SwiftSplit.debug.xcconfig */,
+				E1C15A185F4552F09EFE4D9D /* Pods-SwiftSplit.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		A3C182BC4E4A54B5B911D192 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CF09341B2ECF29501B823DEC /* Pods_SwiftSplit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CD7CDBD8256F5D0D002AE46F = {
 			isa = PBXGroup;
 			children = (
 				CD7CDBE3256F5D0D002AE46F /* SwiftSplit */,
 				CD7CDBE2256F5D0D002AE46F /* Products */,
+				5501C7D80B4DC7DA7135B62A /* Pods */,
+				A3C182BC4E4A54B5B911D192 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -59,6 +98,15 @@
 				CD7CDBEA256F5D0F002AE46F /* Main.storyboard */,
 				CD7CDBED256F5D0F002AE46F /* Info.plist */,
 				CD7CDBEE256F5D0F002AE46F /* SwiftSplit.entitlements */,
+				CD7CDBF4256F5DDB002AE46F /* SwiftSplit-Bridging-Header.h */,
+				CD7CDBFC256F5DFC002AE46F /* CelesteMemoryLayout.md */,
+				CD7CDC02256F626D002AE46F /* LiveSplitServer.swift */,
+				CD7CDC04256F7304002AE46F /* Server.swift */,
+				CD7CDBF9256F5DFC002AE46F /* CelesteScanner.swift */,
+				CD7CDBFB256F5DFC002AE46F /* CelesteSplitter.swift */,
+				CD7CDBFD256F5DFC002AE46F /* memory_scanner.c */,
+				CD7CDBFA256F5DFC002AE46F /* memory_scanner.h */,
+				CD7CDBF8256F5DFC002AE46F /* MemoryScanner.swift */,
 			);
 			path = SwiftSplit;
 			sourceTree = "<group>";
@@ -70,9 +118,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CD7CDBF1256F5D0F002AE46F /* Build configuration list for PBXNativeTarget "SwiftSplit" */;
 			buildPhases = (
+				B84115A84E3ECA84F9E2E188 /* [CP] Check Pods Manifest.lock */,
 				CD7CDBDD256F5D0D002AE46F /* Sources */,
 				CD7CDBDE256F5D0D002AE46F /* Frameworks */,
 				CD7CDBDF256F5D0D002AE46F /* Resources */,
+				4E8A2006F87A047D8A66FB25 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -95,6 +145,7 @@
 				TargetAttributes = {
 					CD7CDBE0256F5D0D002AE46F = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1130;
 					};
 				};
 			};
@@ -128,12 +179,60 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4E8A2006F87A047D8A66FB25 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftSplit/Pods-SwiftSplit-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftSplit/Pods-SwiftSplit-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftSplit/Pods-SwiftSplit-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B84115A84E3ECA84F9E2E188 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SwiftSplit-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		CD7CDBDD256F5D0D002AE46F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD7CDC03256F626D002AE46F /* LiveSplitServer.swift in Sources */,
+				CD7CDBFE256F5DFC002AE46F /* MemoryScanner.swift in Sources */,
+				CD7CDC00256F5DFC002AE46F /* memory_scanner.c in Sources */,
+				CD7CDC01256F5DFC002AE46F /* CelesteSplitter.swift in Sources */,
 				CD7CDBE7256F5D0D002AE46F /* ViewController.swift in Sources */,
+				CD7CDBFF256F5DFC002AE46F /* CelesteScanner.swift in Sources */,
+				CD7CDC05256F7304002AE46F /* Server.swift in Sources */,
 				CD7CDBE5256F5D0D002AE46F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -267,8 +366,10 @@
 		};
 		CD7CDBF2256F5D0F002AE46F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2557401E37458142957F7D9D /* Pods-SwiftSplit.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SwiftSplit/SwiftSplit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -279,14 +380,18 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dev.thecodewarrior.SwiftSplit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SwiftSplit/SwiftSplit-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		CD7CDBF3256F5D0F002AE46F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1C15A185F4552F09EFE4D9D /* Pods-SwiftSplit.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SwiftSplit/SwiftSplit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -297,6 +402,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dev.thecodewarrior.SwiftSplit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SwiftSplit/SwiftSplit-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
