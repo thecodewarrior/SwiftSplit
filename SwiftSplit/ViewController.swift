@@ -41,7 +41,6 @@ class ViewController: NSViewController {
     }
     
     func updateInfo() {
-        
         guard let eventGenerator = self.eventGenerator else {
             print("Memory is nil")
             return
@@ -49,27 +48,13 @@ class ViewController: NSViewController {
         do {
             let events = try eventGenerator.updateInfo()
             updateInfoView(with: eventGenerator.autoSplitterInfo)
+            send("setgametime \(eventGenerator.autoSplitterInfo.chapterTime)")
             processEvents(events)
         } catch {
             updateInfoView(with: AutoSplitterInfo())
             runTimer = false
             print("Error getting info: \(error)")
         }
-    }
-    
-    func tapKey(_ keyCode: Int) {
-        let source = CGEventSource(stateID: .combinedSessionState)
-        CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(keyCode), keyDown: true)?.post(tap: .cghidEventTap)
-        CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(keyCode), keyDown: false)?.post(tap: .cghidEventTap)
-    }
-    
-    func nextSplitKey() {
-        print("Tapping next split")
-        tapKey(kVK_F12)
-    }
-    func resetKey() {
-        print("Tapping reset")
-        tapKey(kVK_F10)
     }
     
     func send(_ command: String) {

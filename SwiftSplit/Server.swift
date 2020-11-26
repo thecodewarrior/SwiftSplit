@@ -12,38 +12,30 @@ import NIOHTTP1
 import NIOWebSocket
 
 class MultiClientWebSocketHandler: ChannelInboundHandler {
-    typealias InboundIn = ByteBuffer
-    typealias OutboundOut = ByteBuffer
+    typealias InboundIn = WebSocketFrame
+    typealias OutboundOut = WebSocketFrame
     
     // All access to channels is guarded by channelsSyncQueue.
     private let channelsSyncQueue = DispatchQueue(label: "channelsQueue")
     private var channels: [ObjectIdentifier: Channel] = [:]
     private var awaitingClose: Set<ObjectIdentifier> = Set()
     
-    public func channelActive(ctx: ChannelHandlerContext) {
+    func handlerAdded(ctx: ChannelHandlerContext) {
         let channel = ctx.channel
         self.channelsSyncQueue.async {
             self.channels[ObjectIdentifier(channel)] = channel
         }
     }
     
-    public func channelInactive(ctx: ChannelHandlerContext) {
+    func handlerRemoved(ctx: ChannelHandlerContext) {
         let channel = ctx.channel
         self.channelsSyncQueue.async {
             self.channels.removeValue(forKey: ObjectIdentifier(channel))
         }
     }
-    
-    public func unwrapInboundFrame(_ value: NIOAny) -> WebSocketFrame {
-        return WebSocketFrame(data: self.unwrapInboundIn(value))
-    }
-    
-    func wrapOutboundFrame(_ value: WebSocketFrame) -> NIOAny {
-        return self.wrapOutboundOut(value.data)
-    }
 
     public func channelRead(ctx: ChannelHandlerContext, data: NIOAny) {
-        let frame = unwrapInboundFrame(data)
+        let frame = unwrapInboundIn(data)
         
         switch frame.opcode {
         case .unknownNonControl, .unknownControl:
@@ -81,7 +73,7 @@ class MultiClientWebSocketHandler: ChannelInboundHandler {
             var data = frame.unmaskedData
             let closeDataCode = data.readSlice(length: 2) ?? ctx.channel.allocator.buffer(capacity: 0)
             let closeFrame = WebSocketFrame(fin: true, opcode: .connectionClose, data: closeDataCode)
-            _ = ctx.write(self.wrapOutboundFrame(closeFrame)).map { () in
+            _ = ctx.write(self.wrapOutboundOut(closeFrame)).map { () in
                 ctx.close(promise: nil)
             }
         }
@@ -96,7 +88,7 @@ class MultiClientWebSocketHandler: ChannelInboundHandler {
         }
         
         let responseFrame = WebSocketFrame(fin: true, opcode: .pong, data: frameData)
-        ctx.write(self.wrapOutboundFrame(responseFrame), promise: nil)
+        ctx.write(self.wrapOutboundOut(responseFrame), promise: nil)
     }
     
     private func receive(unknown frame: WebSocketFrame, ctx: ChannelHandlerContext) {
@@ -105,7 +97,7 @@ class MultiClientWebSocketHandler: ChannelInboundHandler {
         var data = ctx.channel.allocator.buffer(capacity: 2)
         data.write(webSocketErrorCode: .protocolError)
         let frame = WebSocketFrame(fin: true, opcode: .connectionClose, data: data)
-        ctx.write(self.wrapOutboundFrame(frame)).whenComplete {
+        ctx.write(self.wrapOutboundOut(frame)).whenComplete {
             ctx.close(mode: .output, promise: nil)
         }
         
@@ -137,7 +129,7 @@ class MultiClientWebSocketHandler: ChannelInboundHandler {
                 buffer.write(bytes: bytes)
                 
                 let frame = WebSocketFrame(fin: true, opcode: .text, data: buffer)
-                channel.writeAndFlush(self.wrapOutboundFrame(frame), promise: nil)
+                channel.writeAndFlush(self.wrapOutboundOut(frame), promise: nil)
             }
         }
     }
