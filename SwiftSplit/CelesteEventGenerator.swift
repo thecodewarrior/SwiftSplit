@@ -1,5 +1,5 @@
 //
-//  CelesteSplitter.swift
+//  CelesteEventGenerator.swift
 //  MacSplit
 //
 //  Created by Pierce Corcoran on 11/19/20.
@@ -7,13 +7,6 @@
 //
 
 import Foundation
-
-enum CelesteEvent {
-    case levelSwitch(old: String, new: String)
-    case startChapter(chapter: Int)
-    case resetChapter(chapter: Int)
-    case completeChapter(chapter: Int)
-}
 
 class CelesteEventGenerator {
     var scanner: CelesteScanner
@@ -24,7 +17,7 @@ class CelesteEventGenerator {
         try scanner.findHeader()
     }
     
-    func updateInfo() throws -> [CelesteEvent] {
+    func updateInfo() throws -> [String] {
         if let info = try scanner.getInfo() {
             let events = getEvents(from: autoSplitterInfo, to: info)
             autoSplitterInfo = info
@@ -35,19 +28,19 @@ class CelesteEventGenerator {
         }
     }
     
-    func getEvents(from old: AutoSplitterInfo, to new: AutoSplitterInfo) -> [CelesteEvent] {
-        var events: [CelesteEvent] = []
+    func getEvents(from old: AutoSplitterInfo, to new: AutoSplitterInfo) -> [String] {
+        var events: [String] = []
         if new.level != old.level {
-            events.append(.levelSwitch(old: old.level, new: new.level))
+            events.append("\(old.level) > \(new.level)")
         }
         if new.chapterStarted && !old.chapterStarted {
-            events.append(.startChapter(chapter: new.chapter))
+            events.append("start chapter \(new.chapter)")
         }
         if !new.chapterStarted && old.chapterStarted && !old.chapterComplete {
-            events.append(.resetChapter(chapter: old.chapter))
+            events.append("reset chapter")
         }
         if new.chapterComplete && !old.chapterComplete {
-            events.append(.completeChapter(chapter: new.chapter))
+            events.append("complete chapter")
         }
         return events
     }

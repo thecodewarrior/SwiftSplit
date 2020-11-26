@@ -99,14 +99,6 @@ class CelesteScanner {
             pointer = 0
             return
         }
-        
-//        let nameFilter = MemscanFilter()
-//        let nameSignature = MemscanSignature(parsing: "4100750074006F00530070006C006900740074006500720049006E0066006F00")
-//        let asiScanner = MemscanScanner(target: target, signature: nameSignature, filter: nameFilter)
-//        while let match = try asiScanner.next() {
-//            print(String(format: "AutoSplitterInfo string found %08llx", match.address))
-//            try debugMemoryAround(match.address, before: 64, after: 512)
-//        }
 
         let scanner = MemscanScanner(target: target, signature: signature, filter: filter)
         while let match = try scanner.next() {

@@ -20,32 +20,8 @@ class LiveSplitServer {
     let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
 
     init(host: String, port: Int) throws {
-        let upgrader = WebSocketUpgrader(shouldUpgrade: { (head: HTTPRequestHead) in HTTPHeaders() },
-                                         upgradePipelineHandler: { (channel: Channel, _: HTTPRequestHead) in
-                                            channel.pipeline.add(handler: self.handler)
-        })
         
-        let bootstrap: ServerBootstrap
-        bootstrap = ServerBootstrap(group: group)
-            // Specify backlog and enable SO_REUSEADDR for the server itself
-            .serverChannelOption(ChannelOptions.backlog, value: 256)
-            .serverChannelOption(ChannelOptions.socket(SocketOptionLevel(SOL_SOCKET), SO_REUSEADDR), value: 1)
-            
-            // Set the handlers that are applied to the accepted Channels
-            .childChannelInitializer { channel in
-                let httpHandler = HTTPHandler()
-                let config: HTTPUpgradeConfiguration = (
-                    upgraders: [ upgrader ],
-                    completionHandler: { _ in channel.pipeline.remove(handler: httpHandler, promise: nil) }
-                )
-                return channel.pipeline.configureHTTPServerPipeline(withServerUpgrade: config).then { channel.pipeline.add(handler: httpHandler) }
-        }
-            
-            // Enable TCP_NODELAY and SO_REUSEADDR for the accepted Channels
-            .childChannelOption(ChannelOptions.socket(IPPROTO_TCP, TCP_NODELAY), value: 1)
-            .childChannelOption(ChannelOptions.socket(SocketOptionLevel(SOL_SOCKET), SO_REUSEADDR), value: 1)
-
-        let channel = try bootstrap.bind(host: host, port: port).wait()
+        let channel = try startWebSocketServer(host: host, port: port, group: group, handler: handler)
 
         guard let localAddress = channel.localAddress else {
             fatalError("Address was unable to bind. Please check that the socket was not closed or that the address family was understood.")
@@ -57,7 +33,55 @@ class LiveSplitServer {
         try! group.syncShutdownGracefully()
     }
     
-    public func send(message: String) {
+    private func send(_ message: String) {
         handler.sendToAll(text: message)
+    }
+    
+    public func start() {
+        send("start")
+    }
+    
+    public func split() {
+        send("split")
+    }
+    
+    public func splitOrStart() {
+        send("splitorstart")
+    }
+    
+    public func reset() {
+        send("reset")
+    }
+    
+    public func togglePause() {
+        send("togglepause")
+    }
+    
+    public func undo() {
+        send("undo")
+    }
+    
+    public func skip() {
+        send("skip")
+    }
+    
+    public func initGameTime() {
+        send("initgametime")
+    }
+    
+    public func setGameTime(seconds: Double) {
+        send("setgametime \(seconds)")
+    }
+    
+    public func setLoadingTimes(seconds: Double) {
+        send("setloadingtimes \(seconds)")
+    }
+    
+    public func pauseGameTime() {
+        send("pausegametime")
+    }
+    
+    public func resumeGameTime() {
+        send("resumegametime")
     }
 }
