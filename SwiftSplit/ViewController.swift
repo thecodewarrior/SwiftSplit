@@ -13,7 +13,6 @@ class ViewController: NSViewController {
     var eventGenerator: CelesteEventGenerator? = nil
     @IBOutlet weak var signatureLabel: NSTextField!
     @IBOutlet weak var infoLabel: NSTextField!
-    @IBOutlet weak var timerRunningIndicator: NSProgressIndicator!
     @IBOutlet weak var routeLabel: NSTextField!
     
     var timer: Timer? = nil
@@ -29,7 +28,6 @@ class ViewController: NSViewController {
             }
         }
 
-        signatureLabel.stringValue = "No Signature"
         updateInfoView(with: AutoSplitterInfo())
         server = try? LiveSplitServer(host: "localhost", port: 8777)
     }
@@ -65,35 +63,40 @@ class ViewController: NSViewController {
             }
             processEvents(events)
         } catch {
+            self.eventGenerator = nil
             updateInfoView(with: AutoSplitterInfo())
             runTimer = false
-            self.timerRunningIndicator.stopAnimation(nil)
+            signatureLabel.stringValue = "Disconnected"
             print("Error getting info: \(error)")
         }
     }
 
     var routeConfig = RouteConfig(
         useFileTime: false,
-        reset: "reset chapter",
+        reset: "",
         route: []
     )
     var routeIndex = 0
     
     func processEvents(_ events: [String]) {
         for event in events {
+            print("Event: `\(event)`")
             if event == routeConfig.reset {
                 server?.reset()
                 routeIndex = 0
-            } else if routeIndex < routeConfig.route.count && event == routeConfig.route[routeIndex] {
-                if routeIndex == 0 {
-                    server?.reset()
-                    server?.start()
-                } else {
-                    server?.split()
-                }
-                routeIndex += 1
-                if routeIndex == routeConfig.route.count {
-                    routeIndex = 0
+            } else if routeIndex < routeConfig.route.count {
+                let nextEvent = routeConfig.route[routeIndex]
+                if event == nextEvent || "!\(event)" == nextEvent {
+                    if routeIndex == 0 {
+                        server?.reset()
+                        server?.start()
+                    } else if !nextEvent.starts(with: "!") {
+                        server?.split()
+                    }
+                    routeIndex += 1
+                    if routeIndex == routeConfig.route.count {
+                        routeIndex = 0
+                    }
                 }
             }
         }
@@ -157,8 +160,12 @@ class ViewController: NSViewController {
             return
         }
     }
-
-    @IBAction func findHeader(_ sender: Any) {
+    
+    @IBAction func copyServerUrl(_ sender: Any) {
+        NSPasteboard.general.setString("ws://localhost:8777", forType: .string)
+    }
+    
+    @IBAction func connect(_ sender: Any) {
         let apps = NSRunningApplication.runningApplications(withBundleIdentifier: "com.celeste")
         
         if apps.isEmpty {
@@ -169,53 +176,13 @@ class ViewController: NSViewController {
         do {
             self.eventGenerator = try CelesteEventGenerator(pid: apps[0].processIdentifier)
             runTimer = true
-            self.timerRunningIndicator.startAnimation(nil)
         } catch {
             print("Error creating event generator for header: \(error)")
         }
         if let signature = eventGenerator?.scanner.headerSignature {
-            signatureLabel.stringValue = "Signature: " + signature.debugString()
+            signatureLabel.stringValue = "Connected with signature: " + signature.debugString()
         } else {
-            signatureLabel.stringValue = "No Signature"
-        }
-    }
-    
-    @IBAction func getInfo(_ sender: Any) {
-        updateInfo()
-    }
-    
-    @IBAction func toggleAutoUpdate(_ sender: Any) {
-        runTimer = !runTimer
-        if runTimer {
-            self.timerRunningIndicator.startAnimation(nil)
-        } else {
-            self.timerRunningIndicator.stopAnimation(nil)
-        }
-    }
-    
-    @IBAction func runDebugScan(_ sender: Any) {
-        guard let memory = self.eventGenerator?.scanner else {
-            print("Memory is nil")
-            return
-        }
-        
-        do {
-            try memory.debugScan()
-        } catch {
-            print("Error running debug scan: \(error)")
-        }
-    }
-    
-    @IBAction func runPointerDebug(_ sender: Any) {
-        guard let memory = self.eventGenerator?.scanner else {
-            print("Memory is nil")
-            return
-        }
-        
-        do {
-            try memory.debugPointers()
-        } catch {
-            print("Error running debug scan: \(error)")
+            signatureLabel.stringValue = "Not connected"
         }
     }
 }

@@ -87,38 +87,35 @@ typedef struct memscan_match_t {
  Anything in the MEMSCAN_ERROR_KERN_MASK is the value of a kern_return_t return code
  Anything in the MEMSCAN_ERROR_SCAN_MASK is a MEMSCAN_ERROR_* error
  */
-typedef int memscan_error_t;
+typedef struct memscan_error_t {
+    int memscan;
+    int mach;
+} memscan_error;
 
-/**
- The scan completed successfully, even if nothing was found.
- */
 #define MEMSCAN_SUCCESS 0
-
-#define MEMSCAN_ERROR_KERN_MASK 0xff
-#define MEMSCAN_ERROR_SCAN_MASK (~0xff)
 
 /**
  An error occurred getting the page size
  */
-#define MEMSCAN_ERROR_PAGE_SIZE_FAILED (1 << 8)
+#define MEMSCAN_ERROR_PAGE_SIZE_FAILED 1
 /**
  An error occurred getting the region info
  */
-#define MEMSCAN_ERROR_VM_REGION_INFO_FAILED (2 << 8)
+#define MEMSCAN_ERROR_VM_REGION_INFO_FAILED 2
 /**
  An error occurred reading memory
  */
-#define MEMSCAN_ERROR_VM_READ_MEMORY_FAILED (3 << 8)
+#define MEMSCAN_ERROR_VM_READ_MEMORY_FAILED 3
 /**
  An error occurred writing memory
  */
-#define MEMSCAN_ERROR_VM_WRITE_MEMORY_FAILED (4 << 8)
+#define MEMSCAN_ERROR_VM_WRITE_MEMORY_FAILED 4
 
 /**
  Scan until the next match. If a match was found, it is placed `match` and this function returns true, otherwise this function returns false. If the passed error pointer is non-null, any errors will be put there.
  */
-bool memscan_scanner_next(memscan_scanner *scanner, memscan_match *match, memscan_error_t *error);
+bool memscan_scanner_next(memscan_scanner *scanner, memscan_match *match, memscan_error *error);
 
-void *memscan_read(memscan_target target, vm_address_t start, vm_offset_t length, memscan_error_t *error);
+void *memscan_read(memscan_target target, vm_address_t start, vm_offset_t length, memscan_error *error);
 
 #endif /* memory_scanner_h */

@@ -712,23 +712,23 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="K0D-5p-Mzb">
-                                <rect key="frame" x="138" y="92" width="205" height="21"/>
+                                <rect key="frame" x="79" y="92" width="323" height="21"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bys-Uk-4ve">
-                                        <rect key="frame" x="-6" y="-7" width="114" height="32"/>
+                                        <rect key="frame" x="-6" y="-7" width="92" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="xLl-gM-ObY"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="push" title="Find Header" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tuf-xd-Wjg">
+                                        <buttonCell key="cell" type="push" title="Connect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tuf-xd-Wjg">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
-                                            <action selector="findHeader:" target="XfG-lQ-9wD" id="loM-tV-bKL"/>
+                                            <action selector="connect:" target="XfG-lQ-9wD" id="loM-tV-bKL"/>
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ldW-cj-q2x">
-                                        <rect key="frame" x="104" y="-7" width="107" height="32"/>
+                                        <rect key="frame" x="82" y="-7" width="107" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="2lC-my-0MZ"/>
                                         </constraints>
@@ -740,30 +740,46 @@
                                             <action selector="loadSplits:" target="XfG-lQ-9wD" id="IOT-IZ-asz"/>
                                         </connections>
                                     </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DL0-IX-MzM">
+                                        <rect key="frame" x="185" y="-7" width="144" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="iaK-MW-hAe"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Copy Server URL" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OZO-lf-Lw5">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="copyServerUrl:" target="XfG-lQ-9wD" id="RiN-an-LcG"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="DL0-IX-MzM" firstAttribute="leading" secondItem="ldW-cj-q2x" secondAttribute="trailing" constant="8" id="FwI-hO-OWp"/>
+                                    <constraint firstAttribute="trailing" secondItem="DL0-IX-MzM" secondAttribute="trailing" id="GrN-Sr-77F"/>
                                     <constraint firstItem="ldW-cj-q2x" firstAttribute="leading" secondItem="Bys-Uk-4ve" secondAttribute="trailing" constant="8" id="KY8-bL-VwH"/>
                                     <constraint firstItem="ldW-cj-q2x" firstAttribute="top" secondItem="K0D-5p-Mzb" secondAttribute="top" id="WIo-Sv-4IT"/>
-                                    <constraint firstAttribute="trailing" secondItem="ldW-cj-q2x" secondAttribute="trailing" id="lX7-Ra-cdw"/>
+                                    <constraint firstItem="DL0-IX-MzM" firstAttribute="top" secondItem="K0D-5p-Mzb" secondAttribute="top" id="grH-DI-vsj"/>
+                                    <constraint firstAttribute="bottom" secondItem="DL0-IX-MzM" secondAttribute="bottom" id="sOo-Ke-Ill"/>
                                     <constraint firstItem="Bys-Uk-4ve" firstAttribute="leading" secondItem="K0D-5p-Mzb" secondAttribute="leading" id="smt-Yv-Q3H"/>
                                     <constraint firstItem="Bys-Uk-4ve" firstAttribute="top" secondItem="K0D-5p-Mzb" secondAttribute="top" id="w1l-0h-bPW"/>
                                     <constraint firstAttribute="height" constant="21" id="wNg-ht-MPb"/>
                                 </constraints>
                             </customView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8ue-EI-oPc">
-                                <rect key="frame" x="425" y="20" width="37" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="aEg-Gi-Gd9">
+                                <rect key="frame" x="327" y="20" width="135" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Route config: &lt;none&gt;" id="aEg-Gi-Gd9">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PvB-8z-yhJ">
-                                <rect key="frame" x="222" y="68" width="37" height="16"/>
+                                <rect key="frame" x="193" y="68" width="94" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="iOX-DW-DCA"/>
                                 </constraints>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="ckk-vz-eGP">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Not connected" id="ckk-vz-eGP">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -777,9 +793,6 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="dLP-Qc-X57">
-                                <rect key="frame" x="353" y="95" width="16" height="16"/>
-                            </progressIndicator>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b1e-xt-GQZ">
                                 <rect key="frame" x="18" y="20" width="37" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="Qn0-Na-ias">
@@ -791,13 +804,11 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="8ue-EI-oPc" firstAttribute="top" secondItem="b1e-xt-GQZ" secondAttribute="top" id="3qN-mO-agB"/>
-                            <constraint firstItem="dLP-Qc-X57" firstAttribute="centerY" secondItem="K0D-5p-Mzb" secondAttribute="centerY" id="KSC-Kp-hXd"/>
                             <constraint firstItem="b1e-xt-GQZ" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="KyO-hK-buF"/>
                             <constraint firstItem="PvB-8z-yhJ" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="NPF-dV-ETX"/>
                             <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="8ue-EI-oPc" secondAttribute="bottom" constant="20" id="Xcn-M8-Rti"/>
                             <constraint firstItem="K0D-5p-Mzb" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" id="Zv6-rr-DxS"/>
                             <constraint firstItem="6HK-T3-n61" firstAttribute="top" secondItem="PvB-8z-yhJ" secondAttribute="bottom" constant="8" id="h0e-Aa-dG0"/>
-                            <constraint firstItem="dLP-Qc-X57" firstAttribute="leading" secondItem="K0D-5p-Mzb" secondAttribute="trailing" constant="10" id="jkA-7p-Jgz"/>
                             <constraint firstItem="8ue-EI-oPc" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="b1e-xt-GQZ" secondAttribute="trailing" constant="8" id="q1B-vx-m9d"/>
                             <constraint firstItem="K0D-5p-Mzb" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="qVB-JD-nHh"/>
                             <constraint firstAttribute="trailing" secondItem="8ue-EI-oPc" secondAttribute="trailing" constant="20" id="qoR-vH-H10"/>
@@ -811,7 +822,6 @@
                         <outlet property="infoLabel" destination="b1e-xt-GQZ" id="iDP-Ku-O7J"/>
                         <outlet property="routeLabel" destination="8ue-EI-oPc" id="BDr-aH-3zV"/>
                         <outlet property="signatureLabel" destination="PvB-8z-yhJ" id="lAk-c0-U2y"/>
-                        <outlet property="timerRunningIndicator" destination="dLP-Qc-X57" id="pmN-6d-c1L"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

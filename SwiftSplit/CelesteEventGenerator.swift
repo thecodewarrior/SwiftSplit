@@ -40,7 +40,7 @@ class CelesteEventGenerator {
             events.append("reset chapter")
         }
         if new.chapterComplete && !old.chapterComplete {
-            events.append("complete chapter")
+            events.append("complete chapter \(old.chapter)")
         }
         return events
     }

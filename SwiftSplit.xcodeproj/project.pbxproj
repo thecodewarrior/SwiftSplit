@@ -17,6 +17,7 @@
 		CD7CDC01256F5DFC002AE46F /* CelesteEventGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBFB256F5DFC002AE46F /* CelesteEventGenerator.swift */; };
 		CD7CDC03256F626D002AE46F /* LiveSplitServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDC02256F626D002AE46F /* LiveSplitServer.swift */; };
 		CD7CDC05256F7304002AE46F /* MultiClientWebSocketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDC04256F7304002AE46F /* MultiClientWebSocketServer.swift */; };
+		CD7CDC2825717D2D002AE46F /* CelesteSplitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDC2725717D2D002AE46F /* CelesteSplitter.swift */; };
 		DB56D9F05D0BC5B4DE4CECC8 /* Pods_SwiftSplit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF09341B2ECF29501B823DEC /* Pods_SwiftSplit.framework */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +39,7 @@
 		CD7CDBFD256F5DFC002AE46F /* memory_scanner.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = memory_scanner.c; sourceTree = "<group>"; };
 		CD7CDC02256F626D002AE46F /* LiveSplitServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSplitServer.swift; sourceTree = "<group>"; };
 		CD7CDC04256F7304002AE46F /* MultiClientWebSocketServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiClientWebSocketServer.swift; sourceTree = "<group>"; };
+		CD7CDC2725717D2D002AE46F /* CelesteSplitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelesteSplitter.swift; sourceTree = "<group>"; };
 		CF09341B2ECF29501B823DEC /* Pods_SwiftSplit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftSplit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1C15A185F4552F09EFE4D9D /* Pods-SwiftSplit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSplit.release.xcconfig"; path = "Target Support Files/Pods-SwiftSplit/Pods-SwiftSplit.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,19 +97,15 @@
 				CD7CDC06256F8A21002AE46F /* Core */,
 				CD7CDBE4256F5D0D002AE46F /* AppDelegate.swift */,
 				CD7CDBE6256F5D0D002AE46F /* ViewController.swift */,
+				CD7CDC2725717D2D002AE46F /* CelesteSplitter.swift */,
 				CD7CDBE8256F5D0F002AE46F /* Assets.xcassets */,
 				CD7CDBEA256F5D0F002AE46F /* Main.storyboard */,
 				CD7CDBED256F5D0F002AE46F /* Info.plist */,
 				CD7CDBEE256F5D0F002AE46F /* SwiftSplit.entitlements */,
 				CD7CDBF4256F5DDB002AE46F /* SwiftSplit-Bridging-Header.h */,
 				CD7CDBFC256F5DFC002AE46F /* CelesteMemoryLayout.md */,
-				CD7CDC02256F626D002AE46F /* LiveSplitServer.swift */,
-				CD7CDC04256F7304002AE46F /* MultiClientWebSocketServer.swift */,
 				CD7CDBF9256F5DFC002AE46F /* CelesteScanner.swift */,
 				CD7CDBFB256F5DFC002AE46F /* CelesteEventGenerator.swift */,
-				CD7CDBFD256F5DFC002AE46F /* memory_scanner.c */,
-				CD7CDBFA256F5DFC002AE46F /* memory_scanner.h */,
-				CD7CDBF8256F5DFC002AE46F /* MemoryScanner.swift */,
 			);
 			path = SwiftSplit;
 			sourceTree = "<group>";
@@ -115,6 +113,11 @@
 		CD7CDC06256F8A21002AE46F /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				CD7CDBFD256F5DFC002AE46F /* memory_scanner.c */,
+				CD7CDBFA256F5DFC002AE46F /* memory_scanner.h */,
+				CD7CDBF8256F5DFC002AE46F /* MemoryScanner.swift */,
+				CD7CDC02256F626D002AE46F /* LiveSplitServer.swift */,
+				CD7CDC04256F7304002AE46F /* MultiClientWebSocketServer.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 				CD7CDBFF256F5DFC002AE46F /* CelesteScanner.swift in Sources */,
 				CD7CDC05256F7304002AE46F /* MultiClientWebSocketServer.swift in Sources */,
 				CD7CDBE5256F5D0D002AE46F /* AppDelegate.swift in Sources */,
+				CD7CDC2825717D2D002AE46F /* CelesteSplitter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

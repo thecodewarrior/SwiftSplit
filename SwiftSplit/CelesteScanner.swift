@@ -8,6 +8,9 @@
 
 import Foundation
 
+/**
+ Scans for and interprets the Celeste AutoSplitterInfo
+ */
 class CelesteScanner {
     var enableDebugPrinting: Bool = false
     

@@ -150,7 +150,7 @@ memscan_scanner *memscan_scanner_create(memscan_target target, const memscan_sig
 /**
  Find the next (filtered) region. Returns true if a region was found, false otherwise.
  */
-bool memscan_scanner_next_region(memscan_scanner *scanner, memscan_error_t *error) {
+bool memscan_scanner_next_region(memscan_scanner *scanner, memscan_error *error) {
     if(scanner->region_address == 0) {
         scanner->region_address = scanner->filter.start_address;
     }
@@ -180,7 +180,10 @@ bool memscan_scanner_next_region(memscan_scanner *scanner, memscan_error_t *erro
         
         if(kr) {
             // we've encountered an actual error
-            if(error) *error = MEMSCAN_ERROR_VM_REGION_INFO_FAILED & kr;
+            if(error) *error = (memscan_error) {
+                .memscan = MEMSCAN_ERROR_VM_REGION_INFO_FAILED,
+                .mach = kr
+            };
             return false;
         }
 
@@ -201,7 +204,7 @@ bool memscan_scanner_next_region(memscan_scanner *scanner, memscan_error_t *erro
     
 }
 
-bool memscan_scanner_next(memscan_scanner *scanner, memscan_match *match, memscan_error_t *error) {
+bool memscan_scanner_next(memscan_scanner *scanner, memscan_match *match, memscan_error *error) {
     bool is_first = false;
     if(scanner->page_size == 0) {
         // this is the first call. Get everything set up.
@@ -209,7 +212,7 @@ bool memscan_scanner_next(memscan_scanner *scanner, memscan_match *match, memsca
         kern_return_t kr = host_page_size(mach_host_self(), &page_size);
         if(kr) {
             printf("Failed to get page size: host_page_size returned %d", kr);
-            if(error) *error = MEMSCAN_ERROR_PAGE_SIZE_FAILED | kr;
+            if(error) *error = (memscan_error) { .memscan = MEMSCAN_ERROR_PAGE_SIZE_FAILED, .mach = kr };
             return false;
         }
         scanner->page_size = page_size;
@@ -268,7 +271,7 @@ bool memscan_scanner_next(memscan_scanner *scanner, memscan_match *match, memsca
                                                  (vm_address_t)scanner->page_buffer, &data_cnt);
             
             if(kr) {
-                if(error) *error = MEMSCAN_ERROR_VM_READ_MEMORY_FAILED & kr;
+                if(error) *error = (memscan_error) { .memscan = MEMSCAN_ERROR_VM_READ_MEMORY_FAILED, .mach = kr };
                 return false;
             }
         }
@@ -306,7 +309,7 @@ bool memscan_scanner_next(memscan_scanner *scanner, memscan_match *match, memsca
     return false;
 }
 
-void *memscan_read(memscan_target target, vm_address_t start, vm_offset_t length, memscan_error_t *error) {
+void *memscan_read(memscan_target target, vm_address_t start, vm_offset_t length, memscan_error *error) {
     vm_size_t data_cnt;
     
     void* data = (void*)malloc(length);
@@ -314,7 +317,7 @@ void *memscan_read(memscan_target target, vm_address_t start, vm_offset_t length
     kern_return_t kr = vm_read_overwrite(target.task, start, length, (vm_address_t)data, &data_cnt);
     
     if(kr) {
-        *error = MEMSCAN_ERROR_VM_READ_MEMORY_FAILED & kr;
+        *error = (memscan_error) { .memscan = MEMSCAN_ERROR_VM_READ_MEMORY_FAILED, .mach = kr };
         free(data);
         return 0;
     }

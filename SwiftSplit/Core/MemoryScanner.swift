@@ -9,9 +9,9 @@
 import Foundation
 
 enum MemscanError : Error {
-    case errorGettingTask(result: kern_return_t)
-    case scanError(result: memscan_error_t)
-    case readError(result: memscan_error_t)
+    case errorGettingTask(machError: String)
+    case scanError(result: memscan_error, machError: String)
+    case readError(result: memscan_error, machError: String)
     case readNullPointer
 }
 
@@ -82,16 +82,16 @@ class MemscanTarget {
         var task: mach_port_name_t = 0
         let kernResult = task_for_pid(mach_task_self_, pid, &task)
         if(kernResult != KERN_SUCCESS) {
-            throw MemscanError.errorGettingTask(result: kernResult)
+            throw MemscanError.errorGettingTask(machError: String(cString: mach_error_string(kernResult)))
         }
         self.native = memscan_target(pid: pid, task: task)
     }
     
     func read(at pointer: vm_address_t, count: vm_offset_t) throws -> MemscanReadResult {
-        var error: memscan_error_t = 0
+        var error: memscan_error = memscan_error()
         let data = memscan_read(native, pointer, count, &error)
-        if(error != MEMSCAN_SUCCESS) {
-            throw MemscanError.readError(result: error)
+        if(error.memscan != MEMSCAN_SUCCESS) {
+            throw MemscanError.readError(result: error, machError: String(cString: mach_error_string(error.mach)))
         }
         guard data != nil else {
             throw MemscanError.readNullPointer
@@ -163,12 +163,12 @@ class MemscanScanner {
     
     func next() throws -> MemscanMatch? {
         var match = memscan_match()
-        var error: memscan_error_t = 0
+        var error: memscan_error = memscan_error()
         if(memscan_scanner_next(native, &match, &error)) {
             return MemscanMatch(native: match)
         }
-        if(error != MEMSCAN_SUCCESS) {
-            throw MemscanError.scanError(result: error)
+        if(error.memscan != MEMSCAN_SUCCESS) {
+            throw MemscanError.scanError(result: error, machError: String(cString: mach_error_string(error.mach)))
         }
         return nil
     }
