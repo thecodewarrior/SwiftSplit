@@ -8,7 +8,7 @@
 
 import Cocoa
 
-//@NSApplicationMain // we use a custom main, so we don't want an implicit one generated for us
+@NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {

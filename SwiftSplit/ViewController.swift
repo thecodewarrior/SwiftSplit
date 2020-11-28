@@ -132,10 +132,10 @@ class ViewController: NSViewController {
         }
         
         do {
-            self.ignorePid = pid
             self.splitter = try CelesteSplitter(pid: pid, server: server)
             self.splitter?.routeConfig = routeConfig
             connectionStatusLabel.stringValue = "Connected"
+            self.ignorePid = pid
         } catch {
             print("Error creating splitter: \(error)")
         }
