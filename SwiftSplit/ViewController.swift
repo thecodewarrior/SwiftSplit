@@ -10,134 +10,215 @@ import Cocoa
 import Carbon
 
 class ViewController: NSViewController {
-    var eventGenerator: CelesteEventGenerator? = nil
-    @IBOutlet weak var signatureLabel: NSTextField!
-    @IBOutlet weak var infoLabel: NSTextField!
-    @IBOutlet weak var routeLabel: NSTextField!
+    var splitter: CelesteSplitter? = nil
+
+    @IBOutlet weak var gameTimeLabel: NSTextField!
+    @IBOutlet weak var nextEventLabel: NSTextField!
+    @IBOutlet weak var livesplitClientsLabel: NSTextField!
+    @IBOutlet weak var eventStreamLabel: NSTextField!
     
+    @IBOutlet weak var loadedRouteLabel: NSTextField!
+    @IBOutlet weak var routeDataLabel: NSTextField!
+    
+    @IBOutlet weak var connectionStatusLabel: NSTextField!
+    @IBOutlet weak var celesteDataLabel: NSTextField!
+    
+    var showRouteData = false
+    var showCelesteData = false
+    let eventStreamLength = 6
+    var eventStream: [String] = []
+
+    // we will ignore the celeste instance that was open when we first launched (if any). We don't know if they're in a clean state.
+    // we also ignore the pid once it has been connected to. this prevents attempting to reconnect immediately after the game closes and we disconnect
+    var ignorePid: pid_t?
+    
+    var hasRouteConfig = false
+    var routeConfig = RouteConfig() {
+        didSet {
+            splitter?.routeConfig = routeConfig
+        }
+    }
+
     var timer: Timer? = nil
-    var runTimer: Bool = false
+    var connectTimer: Timer? = nil
     var server: LiveSplitServer? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eventStream = Array(repeating: "", count: eventStreamLength)
+        self.ignorePid = findCelestePid()
 
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-            if self.runTimer {
-                self.updateInfo()
-            }
+            self.update()
+            self.updateInfoViews()
         }
 
-        updateInfoView(with: AutoSplitterInfo())
+        eventStreamLabel.stringValue = eventStream.joined(separator: "\n")
         server = try? LiveSplitServer(host: "localhost", port: 8777)
     }
 
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
+    func update() {
+        livesplitClientsLabel.stringValue = "\(server?.connectedClients ?? 0)"
+        if self.splitter == nil {
+            tryConnecting()
         }
-    }
-    
-    var gameTimeRunning = false
-    func updateInfo() {
-        guard let eventGenerator = self.eventGenerator else {
-            print("Memory is nil")
+        guard let splitter = self.splitter else {
             return
         }
+        
         do {
-            let events = try eventGenerator.updateInfo()
-            updateInfoView(with: eventGenerator.autoSplitterInfo)
-            if routeConfig.useFileTime {
-                server?.setGameTime(seconds: eventGenerator.autoSplitterInfo.fileTime)
-            } else {
-                server?.setGameTime(seconds: eventGenerator.autoSplitterInfo.chapterTime)
-            }
-            if eventGenerator.autoSplitterInfo.timerActive {
-                if !gameTimeRunning {
-                    server?.resumeGameTime()
-                    gameTimeRunning = true
-                }
-            } else if gameTimeRunning {
-                server?.pauseGameTime()
-                gameTimeRunning = false
-            }
-            processEvents(events)
+            let events = try splitter.update()
+            eventStream = (eventStream + events.map { "\"\($0)\"" }).suffix(eventStreamLength)
         } catch {
-            self.eventGenerator = nil
-            updateInfoView(with: AutoSplitterInfo())
-            runTimer = false
-            signatureLabel.stringValue = "Disconnected"
+            self.splitter = nil
+            eventStream = Array(repeating: "", count: eventStreamLength)
+            connectionStatusLabel.stringValue = "Disconnected"
             print("Error getting info: \(error)")
         }
+        eventStreamLabel.stringValue = eventStream.joined(separator: "\n")
     }
-
-    var routeConfig = RouteConfig(
-        useFileTime: false,
-        reset: "",
-        route: []
-    )
-    var routeIndex = 0
     
-    func processEvents(_ events: [String]) {
-        for event in events {
-            print("Event: `\(event)`")
-            if event == routeConfig.reset {
-                server?.reset()
-                routeIndex = 0
-            } else if routeIndex < routeConfig.route.count {
-                let nextEvent = routeConfig.route[routeIndex]
-                if event == nextEvent || "!\(event)" == nextEvent {
-                    if routeIndex == 0 {
-                        server?.reset()
-                        server?.start()
-                    } else if !nextEvent.starts(with: "!") {
-                        server?.split()
-                    }
-                    routeIndex += 1
-                    if routeIndex == routeConfig.route.count {
-                        routeIndex = 0
-                    }
-                }
+    func tryConnecting() {
+        if self.connectTimer != nil {
+            return
+        }
+        guard let pid = findCelestePid() else {
+            return
+        }
+
+        var connectionAttempts = 0
+        self.connectionStatusLabel.stringValue = "Connecting…"
+        connectTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+            if NSRunningApplication(processIdentifier: pid) == nil {
+                self.connectTimer?.invalidate()
+                self.connectTimer = nil
+                self.connectionStatusLabel.stringValue = "Not connected"
+            }
+            
+            self.connect(pid: pid)
+            
+            connectionAttempts += 1
+            if self.splitter != nil {
+                self.connectTimer?.invalidate()
+                self.connectTimer = nil
+            } else if connectionAttempts > 5 {
+                self.connectTimer?.invalidate()
+                self.connectTimer = nil
+                self.connectionStatusLabel.stringValue = "Connection failed"
             }
         }
     }
     
-    func updateInfoView(with info: AutoSplitterInfo) {
-        infoLabel.stringValue = """
-        Object Header: \(String(format: "%08llx", info.data.header))
-        Object Location: \(String(format: "%08llx", info.data.location))
+    func findCelestePid() -> pid_t? {
+        let apps = NSRunningApplication.runningApplications(withBundleIdentifier: "com.celeste")
         
-        Chapter: \(info.chapter)
-        Mode: \(info.mode)
-        Level:
-            Name Pointer: \(String(format: "%llx", info.data.levelPointer))
-            Name: \(info.level)
-            Timer Active: \(info.timerActive)
-        Chapter:
-            Started: \(info.chapterStarted)
-            Complete: \(info.chapterComplete)
-            Time: \(info.chapterTime)
-            Strawberries: \(info.chapterStrawberries)
-            Cassette: \(info.chapterCassette)
-            Heart: \(info.chapterHeart)
-        File:
-            Time: \(info.fileTime)
-            Strawberries: \(info.fileStrawberries)
-            Cassettes: \(info.fileCassettes)
-            Hearts: \(info.fileHearts)
-        """
+        if apps.isEmpty {
+            return nil
+        }
+        let pid = apps[0].processIdentifier
+        
+        if pid == ignorePid {
+            return nil // this celeste process was open when we launched, so we don't know that it's in a clean state.
+        }
+        
+        return pid
+    }
+    
+    func connect(pid: pid_t) {
+        guard let server = self.server else {
+            return
+        }
+        
+        do {
+            self.ignorePid = pid
+            self.splitter = try CelesteSplitter(pid: pid, server: server)
+            self.splitter?.routeConfig = routeConfig
+            connectionStatusLabel.stringValue = "Connected"
+        } catch {
+            print("Error creating splitter: \(error)")
+        }
     }
 
-    @IBAction func loadSplits(_ sender: Any) {
+    func updateInfoViews() {
+        if !hasRouteConfig {
+            routeDataLabel.stringValue = "<none>"
+        } else if showRouteData {
+            routeDataLabel.stringValue = """
+            Use file time: \(routeConfig.useFileTime)
+            Reset event: '\(routeConfig.reset)'
+            Route:
+            \(routeConfig.route.map { "    '\($0)'" }.joined(separator: "\n"))
+            """
+        } else {
+            routeDataLabel.stringValue = "…"
+        }
+        
+        guard let splitter = splitter else {
+            gameTimeLabel.stringValue = "<none>"
+            nextEventLabel.stringValue = routeConfig.route.isEmpty ? "<none>" : "\"\(routeConfig.route[0])\""
+            celesteDataLabel.stringValue = "<none>"
+            return
+        }
+        
+        let info = splitter.autoSplitterInfo
+        if showCelesteData {
+            celesteDataLabel.stringValue = """
+            Object Header: \(String(format: "%08llx", info.data.header))
+            Object Location: \(String(format: "%08llx", info.data.location))
+            
+            Chapter: \(info.chapter)
+            Mode: \(info.mode)
+            Level:
+                Name Pointer: \(String(format: "%llx", info.data.levelPointer))
+                Name: \(info.level)
+                Timer Active: \(info.timerActive)
+            Chapter:
+                Started: \(info.chapterStarted)
+                Complete: \(info.chapterComplete)
+                Time: \(info.chapterTime)
+                Strawberries: \(info.chapterStrawberries)
+                Cassette: \(info.chapterCassette)
+                Heart: \(info.chapterHeart)
+            File:
+                Time: \(info.fileTime)
+                Strawberries: \(info.fileStrawberries)
+                Cassettes: \(info.fileCassettes)
+                Hearts: \(info.fileHearts)
+            """
+        } else {
+            celesteDataLabel.stringValue = "…"
+        }
+        
+        let time = routeConfig.useFileTime ? info.fileTime : info.chapterTime
+        let seconds = time.truncatingRemainder(dividingBy: 60)
+        let minutes = Int(time / 60) % 60
+        let hours = Int(time / 3600) % 60
+        
+        var timeString = ""
+        if hours > 0 { timeString +=  "\(hours):" }
+        if minutes > 0 {
+            if timeString != "" {
+                timeString +=  String(format: "%02d:", minutes)
+            } else {
+                timeString +=  String(format: "%d:", minutes)
+            }
+        }
+        if timeString != "" {
+            timeString += String(format: "%02.3f", seconds)
+        } else {
+            timeString += String(format: "%.3f", seconds)
+        }
+            
+        gameTimeLabel.stringValue = timeString
+        
+        nextEventLabel.stringValue = splitter.routeIndex < routeConfig.route.count ? "\"\(routeConfig.route[splitter.routeIndex])\"" : "<none>"
+    }
+
+    @IBAction func loadRoute(_ sender: Any) {
         let dialog = NSOpenPanel();
         
-        dialog.title                   = "Choose a route .json file";
-        dialog.showsResizeIndicator    = true;
-        dialog.showsHiddenFiles        = false;
-        dialog.canChooseDirectories    = false;
-        dialog.canCreateDirectories    = false;
-        dialog.allowsMultipleSelection = false;
-        dialog.allowedFileTypes        = ["json"];
+        dialog.title = "Choose a route .json file";
+        dialog.allowedFileTypes = ["json"];
         
         if (dialog.runModal() == .OK) {
             guard let fileUrl = dialog.url,
@@ -147,62 +228,27 @@ class ViewController: NSViewController {
             else {
                 return
             }
+            hasRouteConfig = true
             routeConfig = config
-            routeLabel.stringValue = """
-            Route config: \(fileUrl.lastPathComponent)
-            Use file time: \(routeConfig.useFileTime)
-            Reset event: '\(routeConfig.reset)'
-            Route:
-            \(routeConfig.route.map { "    '\($0)'" }.joined(separator: "\n"))
-            """
+
+            loadedRouteLabel.stringValue = "\(fileUrl.lastPathComponent)"
+            
+            updateInfoViews()
+            
         } else {
             // User clicked on "Cancel"
             return
         }
     }
     
-    @IBAction func copyServerUrl(_ sender: Any) {
-        NSPasteboard.general.setString("ws://localhost:8777", forType: .string)
+    @IBAction func discloseRouteData(_ sender: Any) {
+        showRouteData = !showRouteData
+        updateInfoViews()
     }
     
-    @IBAction func connect(_ sender: Any) {
-        let apps = NSRunningApplication.runningApplications(withBundleIdentifier: "com.celeste")
-        
-        if apps.isEmpty {
-            print("No celeste app running")
-            return
-        }
-        
-        do {
-            self.eventGenerator = try CelesteEventGenerator(pid: apps[0].processIdentifier)
-            runTimer = true
-        } catch {
-            print("Error creating event generator for header: \(error)")
-        }
-        if let signature = eventGenerator?.scanner.headerSignature {
-            signatureLabel.stringValue = "Connected with signature: " + signature.debugString()
-        } else {
-            signatureLabel.stringValue = "Not connected"
-        }
+    @IBAction func discloseCelesteData(_ sender: Any) {
+        showCelesteData = !showCelesteData
+        updateInfoViews()
     }
 }
 
-struct RouteConfig {
-    let useFileTime: Bool
-    let reset: String
-    let route: [String]
-}
-
-extension RouteConfig {
-    init?(json: [String: Any]) {
-        guard let useFileTime = json["useFileTime"] as? Bool,
-            let reset = json["reset"] as? String,
-            let route = json["route"] as? [String]
-            else {
-                return nil
-        }
-        self.useFileTime = useFileTime
-        self.reset = reset
-        self.route = route
-    }
-}

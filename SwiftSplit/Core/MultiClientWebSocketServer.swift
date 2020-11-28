@@ -19,6 +19,9 @@ class MultiClientWebSocketHandler: ChannelInboundHandler {
     private let channelsSyncQueue = DispatchQueue(label: "channelsQueue")
     private var channels: [ObjectIdentifier: Channel] = [:]
     private var awaitingClose: Set<ObjectIdentifier> = Set()
+    var connectedClients: Int {
+        get { channels.count }
+    }
     
     func handlerAdded(ctx: ChannelHandlerContext) {
         let channel = ctx.channel

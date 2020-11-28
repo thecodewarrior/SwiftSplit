@@ -16,8 +16,11 @@ class LiveSplitServerHandler: MultiClientWebSocketHandler {
 }
 
 class LiveSplitServer {
-    let handler = LiveSplitServerHandler()
-    let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+    private let handler = LiveSplitServerHandler()
+    private let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+    var connectedClients: Int {
+        get { handler.connectedClients }
+    }
 
     init(host: String, port: Int) throws {
         
