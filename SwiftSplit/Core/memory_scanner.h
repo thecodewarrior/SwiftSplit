@@ -1,6 +1,6 @@
 //
 //  memory_scanner.h
-//  MacSplit.Celeste
+//  SwiftSplit.Celeste
 //
 //  Created by Pierce Corcoran on 11/3/20.
 //  Copyright © 2020 Pierce Corcoran. All rights reserved.
