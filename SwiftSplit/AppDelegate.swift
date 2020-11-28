@@ -8,10 +8,8 @@
 
 import Cocoa
 
-@NSApplicationMain
+//@NSApplicationMain // we use a custom main, so we don't want an implicit one generated for us
 class AppDelegate: NSObject, NSApplicationDelegate {
-
-
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application

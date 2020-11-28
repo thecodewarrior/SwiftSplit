@@ -45,6 +45,8 @@ class ViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSApp.activate(ignoringOtherApps: true)
+        
         self.eventStream = Array(repeating: "", count: eventStreamLength)
         self.ignorePid = findCelestePid()
 

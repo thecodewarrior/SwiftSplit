@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD27172E2572CB28004A81C8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD27172D2572CB28004A81C8 /* main.swift */; };
 		CD7CDBE5256F5D0D002AE46F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBE4256F5D0D002AE46F /* AppDelegate.swift */; };
 		CD7CDBE7256F5D0D002AE46F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBE6256F5D0D002AE46F /* ViewController.swift */; };
 		CD7CDBE9256F5D0F002AE46F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD7CDBE8256F5D0F002AE46F /* Assets.xcassets */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		2557401E37458142957F7D9D /* Pods-SwiftSplit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSplit.debug.xcconfig"; path = "Target Support Files/Pods-SwiftSplit/Pods-SwiftSplit.debug.xcconfig"; sourceTree = "<group>"; };
+		CD27172D2572CB28004A81C8 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		CD7CDBE1256F5D0D002AE46F /* SwiftSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD7CDBE4256F5D0D002AE46F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD7CDBE6256F5D0D002AE46F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			children = (
 				CD7CDC06256F8A21002AE46F /* Core */,
 				CD7CDBE4256F5D0D002AE46F /* AppDelegate.swift */,
+				CD27172D2572CB28004A81C8 /* main.swift */,
 				CD7CDBE6256F5D0D002AE46F /* ViewController.swift */,
 				CD7CDC2725717D2D002AE46F /* CelesteSplitter.swift */,
 				CD7CDBE8256F5D0F002AE46F /* Assets.xcassets */,
@@ -243,6 +246,7 @@
 				CD7CDC01256F5DFC002AE46F /* CelesteEventGenerator.swift in Sources */,
 				CD7CDBE7256F5D0D002AE46F /* ViewController.swift in Sources */,
 				CD7CDBFF256F5DFC002AE46F /* CelesteScanner.swift in Sources */,
+				CD27172E2572CB28004A81C8 /* main.swift in Sources */,
 				CD7CDC05256F7304002AE46F /* MultiClientWebSocketServer.swift in Sources */,
 				CD7CDBE5256F5D0D002AE46F /* AppDelegate.swift in Sources */,
 				CD7CDC2825717D2D002AE46F /* CelesteSplitter.swift in Sources */,
