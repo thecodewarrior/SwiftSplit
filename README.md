@@ -2,8 +2,9 @@
 
 - Open MacSplit
 - Enter your admin password (MacSplit needs the admin password to read Celeste's game memory
-- Open Celeste *but don't open any maps*
-- Click "Connect" in 
+- Go to [LiveSplit One](https://one.livesplit.org/)
+- Open Celeste *after* MacSplit
+
 
 # Splits JSON
 
