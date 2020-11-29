@@ -11,7 +11,7 @@ import NIO
 import NIOHTTP1
 import NIOWebSocket
 
-class LiveSplitServerHandler: MultiClientWebSocketHandler {
+class LiveSplitServerHandler: SimpleWebSocketServer {
     // we don't receive anything, just send
 }
 

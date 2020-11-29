@@ -45,8 +45,7 @@ class ViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSApp.activate(ignoringOtherApps: true)
-        
+
         self.eventStream = Array(repeating: "", count: eventStreamLength)
         self.ignorePid = findCelestePid()
 
@@ -75,6 +74,7 @@ class ViewController: NSViewController {
             self.splitter = nil
             eventStream = Array(repeating: "", count: eventStreamLength)
             connectionStatusLabel.stringValue = "Disconnected"
+            ignorePid = nil // Everest causes a disconnect but relaunches with the same PID
             print("Error getting info: \(error)")
         }
         eventStreamLabel.stringValue = eventStream.joined(separator: "\n")
@@ -241,6 +241,11 @@ class ViewController: NSViewController {
             // User clicked on "Cancel"
             return
         }
+    }
+    
+    @IBAction func copyServerUrl(_ sender: Any) {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString("ws://localhost:8777", forType: .string)
     }
     
     @IBAction func discloseRouteData(_ sender: Any) {

@@ -68,7 +68,8 @@ class CelesteSplitter {
         if new.level != old.level && old.level != "" && new.level != "" {
             events.append("\(old.level) > \(new.level)")
         }
-        if new.chapterStarted && !old.chapterStarted {
+        // if we don't check `new.chapterComplete`, the summit credits trigger the autosplitter
+        if new.chapterStarted && !old.chapterStarted && !new.chapterComplete {
             events.append("start chapter \(new.chapter)")
         }
         if !new.chapterStarted && old.chapterStarted && !old.chapterComplete {
@@ -120,8 +121,8 @@ extension RouteConfig {
                 return nil
         }
         self.useFileTime = useFileTime
-        self.reset = reset
-        self.route = route
+        self.reset = reset.components(separatedBy: " ##")[0]
+        self.route = route.map { $0.components(separatedBy: " ##")[0] }
     }
     
     init() {

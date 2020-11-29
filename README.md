@@ -36,6 +36,11 @@ The currently defined events are (`<...>` indicates a fill-in parameter):
   looking at the `Level: Name:` when connected to Celeste, or by enabling debug and hovering over the screen in the map 
   editor.
 
-Note that the *exact* text is important. Spaces and capitalization have to match. Also, inserting an exclamation point 
-(`!`) at the beginning of an event will cause that event to not trigger a split. This can be useful when your route
-passes between two screens multiple times but you only want one split.
+Note that the *exact* text is important. Spaces and capitalization have to match. 
+
+- Inserting an exclamation point (`!`) at the beginning of an event will cause that event to not trigger a split. This 
+  can be useful when your route passes between two screens multiple times but you only want one split. 
+- Anything after a ` ##` (*exactly* one space and two pound signs) will be trimmed off. This can be useful for 
+  explaining events.
+ 
+
