@@ -1,0 +1,11 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start chapter 1 ## Start",
+        "5 > 6 ## Crossing",
+        "9 > 9b ## Chasm",
+        "complete chapter 1"
+    ]
+}
+

@@ -1,0 +1,15 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start chapter 3 ## Start",
+        "08-a > 09-b ## Huge Mess",
+        "10-x > 11-x ## - Bottom",
+        "09-b > 10-c ## - Top",
+        "09-b > 11-b ## - Middle",
+        "09-b > 09-d ## Elevator Shaft",
+        "02-d > 00-d ## Presidential Suite",
+        "complete chapter 3"
+    ]
+}
+

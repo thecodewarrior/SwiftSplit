@@ -1,0 +1,15 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start chapter 6 ## Start",
+        "start > 00 ## Lake",
+        "02b > 04 ## Hollows",
+        "20 > b-00 ## Reflection",
+        "b-03 > boss-00 ## Rock Bottom",
+        "boss-13 > boss-14 ## Escalation",
+        "boss-20 > after-00 ## Resolution",
+        "complete chapter 6"
+    ]
+}
+

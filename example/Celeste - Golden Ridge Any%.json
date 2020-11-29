@@ -1,0 +1,12 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start chapter 4 ## Start",
+        "a-09 > b-00 ## Shrine",
+        "b-08 > c-00 ## Old Trail",
+        "c-08 > d-00 ## Cliff Face",
+        "complete chapter 4"
+    ]
+}
+

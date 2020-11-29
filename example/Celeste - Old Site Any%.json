@@ -1,0 +1,13 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start chapter 2 ## Start",
+        "d8 > d3 ## - Mirror",
+        "3x > 3 ## Intervention",
+        "10 > 2 ## - Escape",
+        "13 > end_0 ## Awake",
+        "complete chapter 2"
+    ]
+}
+

@@ -1,0 +1,13 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start chapter 5 ## Start",
+        "a-13 > b-00 ## Depths",
+        "void > c-00 ## Unravelling",
+        "c-13 > d-00 ## Search",
+        "d-20 > e-00 ## Rescue",
+        "complete chapter 5"
+    ]
+}
+

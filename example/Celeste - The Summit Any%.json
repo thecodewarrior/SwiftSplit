@@ -1,0 +1,15 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start chapter 7 ## Start",
+        "a-06 > b-00 ## 500 M",
+        "b-09 > c-00 ## 1000 M",
+        "c-09 > d-00 ## 1500 M",
+        "d-11 > e-00b ## 2000 M",
+        "e-13 > f-00 ## 2500 M",
+        "f-11 > g-00 ## 3000 M",
+        "complete chapter 7"
+    ]
+}
+
