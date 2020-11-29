@@ -197,7 +197,7 @@ class ViewController: NSViewController, RouteBoxDelegate {
         let time = routeConfig.useFileTime ? info.fileTime : info.chapterTime
         let seconds = time.truncatingRemainder(dividingBy: 60)
         let minutes = Int(time / 60) % 60
-        let hours = Int(time / 3600) % 60
+        let hours = Int(time / 3600)
         
         var timeString = ""
         if hours > 0 { timeString +=  "\(hours):" }
@@ -209,7 +209,7 @@ class ViewController: NSViewController, RouteBoxDelegate {
             }
         }
         if timeString != "" {
-            timeString += String(format: "%02.3f", seconds)
+            timeString += String(format: "%06.3f", seconds)
         } else {
             timeString += String(format: "%.3f", seconds)
         }
