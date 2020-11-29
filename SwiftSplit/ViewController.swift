@@ -9,7 +9,7 @@
 import Cocoa
 import Carbon
 
-class ViewController: NSViewController {
+class ViewController: NSViewController, RouteBoxDelegate {
     var splitter: CelesteSplitter? = nil
 
     @IBOutlet weak var gameTimeLabel: NSTextField!
@@ -17,6 +17,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var livesplitClientsLabel: NSTextField!
     @IBOutlet weak var eventStreamLabel: NSTextField!
     
+    @IBOutlet weak var routeBox: RouteBox!
     @IBOutlet weak var loadedRouteLabel: NSTextField!
     @IBOutlet weak var routeDataLabel: NSTextField!
     
@@ -36,6 +37,7 @@ class ViewController: NSViewController {
     var routeConfig = RouteConfig() {
         didSet {
             splitter?.routeConfig = routeConfig
+            splitter?.reset()
         }
     }
 
@@ -56,6 +58,7 @@ class ViewController: NSViewController {
 
         eventStreamLabel.stringValue = eventStream.joined(separator: "\n")
         server = try? LiveSplitServer(host: "localhost", port: 8777)
+        routeBox.delegate = self
     }
 
     func update() {
@@ -216,6 +219,21 @@ class ViewController: NSViewController {
         nextEventLabel.stringValue = splitter.routeIndex < routeConfig.route.count ? "\"\(routeConfig.route[splitter.routeIndex])\"" : "<none>"
     }
 
+    func openRouteFile(url: URL) {
+        guard let data = try? Data(contentsOf: url),
+            let dataValues = try? JSONSerialization.jsonObject(with: data, options: .init()) as? [String: Any],
+            let config = RouteConfig(json: dataValues)
+            else {
+                return
+        }
+        hasRouteConfig = true
+        routeConfig = config
+        
+        loadedRouteLabel.stringValue = "\(url.lastPathComponent)"
+        
+        updateInfoViews()
+    }
+    
     @IBAction func loadRoute(_ sender: Any) {
         let dialog = NSOpenPanel();
         
@@ -223,20 +241,9 @@ class ViewController: NSViewController {
         dialog.allowedFileTypes = ["json"];
         
         if (dialog.runModal() == .OK) {
-            guard let fileUrl = dialog.url,
-                let data = try? Data(contentsOf: fileUrl),
-                let dataValues = try? JSONSerialization.jsonObject(with: data, options: .init()) as? [String: Any],
-                let config = RouteConfig(json: dataValues)
-            else {
-                return
+            if let fileUrl = dialog.url {
+                openRouteFile(url: fileUrl)
             }
-            hasRouteConfig = true
-            routeConfig = config
-
-            loadedRouteLabel.stringValue = "\(fileUrl.lastPathComponent)"
-            
-            updateInfoViews()
-            
         } else {
             // User clicked on "Cancel"
             return

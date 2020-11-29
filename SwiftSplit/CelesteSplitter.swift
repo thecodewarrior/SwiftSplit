@@ -37,6 +37,11 @@ class CelesteSplitter {
     private var gameTimeRunning = false
     private(set) var routeIndex = 0
     
+    func reset() {
+        server.reset()
+        routeIndex = 0
+    }
+    
     func update() throws -> [String] {
         guard let info = try scanner.getInfo() else {
             autoSplitterInfo = AutoSplitterInfo()

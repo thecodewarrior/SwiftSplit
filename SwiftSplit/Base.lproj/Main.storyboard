@@ -871,7 +871,7 @@
                                     </constraints>
                                 </view>
                             </box>
-                            <box title="Route" translatesAutoresizingMaskIntoConstraints="NO" id="neJ-0Z-w8w">
+                            <box title="Route" translatesAutoresizingMaskIntoConstraints="NO" id="neJ-0Z-w8w" customClass="RouteBox" customModule="SwiftSplit" customModuleProvider="target">
                                 <rect key="frame" x="17" y="118" width="503" height="98"/>
                                 <view key="contentView" id="2ja-yw-6wr">
                                     <rect key="frame" x="3" y="3" width="497" height="80"/>
@@ -1065,6 +1065,7 @@
                         <outlet property="livesplitClientsLabel" destination="QmT-1L-MUd" id="380-ot-XCf"/>
                         <outlet property="loadedRouteLabel" destination="KyE-c7-ajR" id="ffN-6y-9V1"/>
                         <outlet property="nextEventLabel" destination="RDG-cX-b88" id="BVL-GJ-0yk"/>
+                        <outlet property="routeBox" destination="neJ-0Z-w8w" id="l6h-DE-9Q4"/>
                         <outlet property="routeDataLabel" destination="8ue-EI-oPc" id="BDr-aH-3zV"/>
                     </connections>
                 </viewController>
