@@ -21,6 +21,8 @@ Launching and using SwiftSplit is fairly simple, with only three broad steps.
 1. Open SwiftSplit
 2. Open Celeste *after* SwiftSplit
    - If you are using Everest, you're free to restart into `orig/Celeste.exe` as normal
+   - The first time SwiftSplit connects it will ask you to enter your administrator password. This is normal, and is 
+     required for SwiftSplit to read information from Celeste.
 3. SwiftSplit should automatically detect Celeste launching and report the "Connection status" as "Connecting…". During 
    this time *do not load any maps.* Stay on the main menu until the connection has been made. This may take up to 30 
    seconds after Celeste fully loads in extreme cases. 
