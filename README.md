@@ -117,8 +117,3 @@ route files. (You can copy the text out of the panel to paste directly into the 
   - `<n> chapter strawberries` - Triggered when a total of `<n>` strawberries are collected in a chapter
   - `<n> file strawberries` - Triggered when a total of `<n>` strawberries are collected in the file
 
-### Some nuances regarding resets: 
-
-If the next expected event in the route is the same as the reset event, the route will take precedence and the run 
-won't be reset. However, if the first event in the route is then detected (though again route takes precedence), the 
-run will reset and start over.
