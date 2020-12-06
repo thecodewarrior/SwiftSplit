@@ -50,20 +50,17 @@ class CelesteSplitter {
         let events = getEvents(from: autoSplitterInfo, to: info)
         autoSplitterInfo = info
         
-        if routeConfig.useFileTime {
-            server.setGameTime(seconds: autoSplitterInfo.fileTime)
-        } else {
-            server.setGameTime(seconds: autoSplitterInfo.chapterTime)
+        let time = routeConfig.useFileTime ? autoSplitterInfo.fileTime : autoSplitterInfo.chapterTime
+        server.setGameTime(seconds: time)
+        
+        // when using the chapter time, `timerActive` will be true before the chapter time starts ticking.
+        // This is because the *file* timer is active even before the *chapter* timer is active
+        let timerActive = autoSplitterInfo.timerActive && time != 0
+        if timerActive != gameTimeRunning {
+            server.setGameTime(running: timerActive)
+            gameTimeRunning = timerActive
         }
-        if autoSplitterInfo.timerActive {
-            if !gameTimeRunning {
-                server.resumeGameTime()
-                gameTimeRunning = true
-            }
-        } else if gameTimeRunning {
-            server.pauseGameTime()
-            gameTimeRunning = false
-        }
+        
         processEvents(events)
         return events
     }

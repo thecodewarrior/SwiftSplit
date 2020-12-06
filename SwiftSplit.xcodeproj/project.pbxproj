@@ -14,7 +14,6 @@
 		CD7CDBFE256F5DFC002AE46F /* MemoryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBF8256F5DFC002AE46F /* MemoryScanner.swift */; };
 		CD7CDBFF256F5DFC002AE46F /* CelesteScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBF9256F5DFC002AE46F /* CelesteScanner.swift */; };
 		CD7CDC00256F5DFC002AE46F /* memory_scanner.c in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBFD256F5DFC002AE46F /* memory_scanner.c */; };
-		CD7CDC01256F5DFC002AE46F /* CelesteEventGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBFB256F5DFC002AE46F /* CelesteEventGenerator.swift */; };
 		CD7CDC03256F626D002AE46F /* LiveSplitServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDC02256F626D002AE46F /* LiveSplitServer.swift */; };
 		CD7CDC05256F7304002AE46F /* SimpleWebSocketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDC04256F7304002AE46F /* SimpleWebSocketServer.swift */; };
 		CD7CDC2825717D2D002AE46F /* CelesteSplitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDC2725717D2D002AE46F /* CelesteSplitter.swift */; };
@@ -35,7 +34,6 @@
 		CD7CDBF8256F5DFC002AE46F /* MemoryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryScanner.swift; sourceTree = "<group>"; };
 		CD7CDBF9256F5DFC002AE46F /* CelesteScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelesteScanner.swift; sourceTree = "<group>"; };
 		CD7CDBFA256F5DFC002AE46F /* memory_scanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = memory_scanner.h; sourceTree = "<group>"; };
-		CD7CDBFB256F5DFC002AE46F /* CelesteEventGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelesteEventGenerator.swift; sourceTree = "<group>"; };
 		CD7CDBFC256F5DFC002AE46F /* CelesteMemoryLayout.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CelesteMemoryLayout.md; sourceTree = "<group>"; };
 		CD7CDBFD256F5DFC002AE46F /* memory_scanner.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = memory_scanner.c; sourceTree = "<group>"; };
 		CD7CDC02256F626D002AE46F /* LiveSplitServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSplitServer.swift; sourceTree = "<group>"; };
@@ -108,7 +106,6 @@
 				CD7CDBF4256F5DDB002AE46F /* SwiftSplit-Bridging-Header.h */,
 				CD7CDBFC256F5DFC002AE46F /* CelesteMemoryLayout.md */,
 				CD7CDBF9256F5DFC002AE46F /* CelesteScanner.swift */,
-				CD7CDBFB256F5DFC002AE46F /* CelesteEventGenerator.swift */,
 			);
 			path = SwiftSplit;
 			sourceTree = "<group>";
@@ -243,7 +240,6 @@
 				CD7CDC03256F626D002AE46F /* LiveSplitServer.swift in Sources */,
 				CD7CDBFE256F5DFC002AE46F /* MemoryScanner.swift in Sources */,
 				CD7CDC00256F5DFC002AE46F /* memory_scanner.c in Sources */,
-				CD7CDC01256F5DFC002AE46F /* CelesteEventGenerator.swift in Sources */,
 				CD7CDBE7256F5D0D002AE46F /* ViewController.swift in Sources */,
 				CDA94457257382D300DB2A85 /* RouteBox.swift in Sources */,
 				CD7CDBFF256F5DFC002AE46F /* CelesteScanner.swift in Sources */,

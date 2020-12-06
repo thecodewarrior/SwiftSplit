@@ -87,4 +87,12 @@ class LiveSplitServer {
     public func resumeGameTime() {
         send("resumegametime")
     }
+    
+    public func setGameTime(running: Bool) {
+        if running {
+            resumeGameTime()
+        } else {
+            pauseGameTime()
+        }
+    }
 }
