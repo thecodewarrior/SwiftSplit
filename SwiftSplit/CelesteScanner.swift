@@ -169,12 +169,12 @@ class CelesteScanner {
  10b212968c7f0000 00000000 00000000 b83c632d01000000 f1aaaa1f f1bbbb1f 01010100 00000000 - placeholders
  --------######## -------- ######## --------######## -------- ######## -------- ########
  0       4        8        12       16      20       24       28       32       36
- 10e28b84a07f0000 00000000 00000000 b009150f01000000 ffffffff ffffffff 00000000 00000000 - AUTOSPLIT save state
+ 10e28b84a07f0000 00000000 00000000 b009150f01000000 ffffffff ffffffff 00000000 00000000 - Fresh launch state
  
  11ffeeddccbbaa11 f1cccc1f 01010000 11addeefbeadde11 f1dddd1f f1eeee1f f1ffff1f 00000000 - placeholders
  --------######## -------- ######## --------######## -------- ######## -------- ########
  40      44       48       52       56      60       64       68       72       76
- 0000000000000000 00000000 00000000 11addeefbeadde11 00000000 00000000 00000000 00000000 - AUTOSPLIT save state
+ 0000000000000000 00000000 00000000 0000000000000000 00000000 00000000 00000000 00000000 - Fresh launch state
  ```
  */
 struct AutoSplitterData: Equatable {
@@ -243,6 +243,13 @@ struct AutoSplitterData: Equatable {
     }
 }
 
+enum ChapterMode {
+    case Normal
+    case BSide
+    case CSide
+    case Other(value: Int)
+}
+
 /**
  A swift representation of the C# AutoSplitterInfo
  */
@@ -250,7 +257,7 @@ class AutoSplitterInfo {
     let data: AutoSplitterData
     
     let chapter: Int
-    let mode: Int
+    let mode: ChapterMode
     let level: String
     let timerActive: Bool
     let chapterStarted: Bool
@@ -268,7 +275,7 @@ class AutoSplitterInfo {
         self.data = AutoSplitterData()
         
         self.chapter = 0
-        self.mode = 0
+        self.mode = .Normal
         self.level = ""
         self.timerActive = false
         self.chapterStarted = false
@@ -287,7 +294,16 @@ class AutoSplitterInfo {
         self.data = data
         
         self.chapter = Int(data.chapter)
-        self.mode = Int(data.mode)
+        switch data.mode {
+        case 0:
+            self.mode = .Normal
+        case 1:
+            self.mode = .BSide
+        case 2:
+            self.mode = .CSide
+        default:
+            self.mode = .Other(value: Int(data.mode))
+        }
         self.level = try AutoSplitterData.parseCSharpString(at: data.levelPointer, target: target)
         self.timerActive = data.timerActive != 0
         self.chapterStarted = data.chapterStarted != 0

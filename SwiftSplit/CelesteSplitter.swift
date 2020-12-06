@@ -67,18 +67,54 @@ class CelesteSplitter {
     
     func getEvents(from old: AutoSplitterInfo, to new: AutoSplitterInfo) -> [String] {
         var events: [String] = []
-        if new.level != old.level && old.level != "" && new.level != "" {
-            events.append("\(old.level) > \(new.level)")
-        }
+        
         // if we don't check `new.chapterComplete`, the summit credits trigger the autosplitter
         if new.chapterStarted && !old.chapterStarted && !new.chapterComplete {
             events.append("start chapter \(new.chapter)")
+            switch new.mode {
+            case .Normal: events.append("start a-side \(new.chapter)")
+            case .BSide: events.append("start b-side \(new.chapter)")
+            case .CSide: events.append("start c-side \(new.chapter)")
+            default: break
+            }
         }
         if !new.chapterStarted && old.chapterStarted && !old.chapterComplete {
             events.append("reset chapter")
+            events.append("reset chapter \(old.chapter)")
+            switch new.mode {
+            case .Normal: events.append("reset a-side \(old.chapter)")
+            case .BSide: events.append("reset b-side \(old.chapter)")
+            case .CSide: events.append("reset c-side \(old.chapter)")
+            default: break
+            }
         }
         if new.chapterComplete && !old.chapterComplete {
             events.append("complete chapter \(old.chapter)")
+            switch new.mode {
+            case .Normal: events.append("complete a-side \(old.chapter)")
+            case .BSide: events.append("complete b-side \(old.chapter)")
+            case .CSide: events.append("complete c-side \(old.chapter)")
+            default: break
+            }
+        }
+        
+        if new.level != old.level && old.level != "" && new.level != "" {
+            events.append("\(old.level) > \(new.level)")
+        }
+        if new.chapterCassette && !old.chapterCassette {
+            events.append("cassette")
+            events.append("chapter \(new.chapter) cassette")
+            events.append("\(new.fileCassettes) total cassettes")
+        }
+        if new.chapterHeart && !old.chapterHeart {
+            events.append("heart")
+            events.append("chapter \(new.chapter) heart")
+            events.append("\(new.fileHearts) total hearts")
+        }
+        if new.chapterStrawberries > old.chapterStrawberries {
+            events.append("strawberry")
+            events.append("\(new.chapterStrawberries) chapter strawberries")
+            events.append("\(new.fileStrawberries) file strawberries")
         }
         return events
     }

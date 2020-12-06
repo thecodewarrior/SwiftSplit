@@ -216,7 +216,9 @@ class ViewController: NSViewController, RouteBoxDelegate {
             
         gameTimeLabel.stringValue = timeString
         
-        nextEventLabel.stringValue = splitter.routeIndex < routeConfig.route.count ? "\"\(routeConfig.route[splitter.routeIndex])\"" : "<none>"
+        nextEventLabel.stringValue = splitter.routeIndex < routeConfig.route.count ?
+            "\"\(routeConfig.route[splitter.routeIndex])\" (\(splitter.routeIndex + 1)/\(routeConfig.route.count))"
+            : "<none>"
     }
 
     func openRouteFile(url: URL) {

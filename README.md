@@ -32,8 +32,8 @@ Launching and using SwiftSplit is fairly simple, with only three broad steps.
 5. Click "Connect to Server" in LiveSplit One and paste that URL
    - Note: navigating away from the timer screen may make the server button say it isn't connected any more. This is a 
      bug. You can check that it's still connected with the "LiveSplit clients" field in SwiftSplit, which should read 
-     "1". If that field reads "0", you need to connect. If it reads "2" or higher then you've connected multiple times 
-     and will need to save your splits and reload LiveSplit One, otherwise each split will count multiple times.
+     "1". If that field reads "0", you need to connect. If it reads "2" or higher then you will need to save your splits 
+     and reload the LiveSplit One tab, otherwise each split will trigger multiple times.
 
 ### Loading the Run
 6. Load up your splits in LiveSplit One
@@ -66,16 +66,59 @@ Here's an example for Old Site Any%:
 }
 ```
 
-The currently defined events are (`<...>` indicates a fill-in parameter):
-- `start chapter <n>` - Triggered when the specified chapter number is started
-- `reset chapter` - Triggered when the current chapter is reset (either by restarting the chapter or exiting to the map)
-- `complete chapter <n>` - Triggered when the specified chapter number is completed
-- `<from screen> > <to screen>` - Triggered when transitioning between two screens (you can find the screen IDS by
-  looking at the `Level: Name:` when connected to Celeste, or by enabling debug and hovering over the screen in the map 
-  editor.
+## Events
+Events are triggered when SwiftSplit observes a change in the game state, which is checked 10 times every second. A 
+single state change frequently causes multiple events, generally with differing levels of specificity. 
 
-Note that the *exact* text is important. Spaces and capitalization have to match, with a couple additions:
+Note that the *exact* text of an event is important. Spaces and capitalization have to match, with a couple additions:
 - Inserting an exclamation point (`!`) at the beginning of an event will cause that event to not trigger a split. This 
   can be useful when your route passes between two screens multiple times but you only want one split. 
 - Anything after a ` ##` (*exactly* one space and two pound signs) will be trimmed off. This can be useful for 
   explaining events.
+
+SwiftSplit has an "Event Stream" panel that displays events as they are triggered, which can be useful when creating 
+route files. (You can copy the text out of the panel to paste directly into the route file too).
+
+### Chapter start/end events
+- `reset chapter` - Triggered when any chapter is reset (either by restarting the chapter or exiting to the map)
+- `start chapter <n>` - Triggered when chapter `<n>` is started
+- `reset chapter <n>` - Triggered when chapter `<n>` is reset
+- `complete chapter <n>` - Triggered when chapter `<n>` is completed
+- **A-side specific:**
+  - `start a-side <n>` - Triggered when chapter `<n>`'s A-side is started
+  - `reset a-side <n>` - Triggered when chapter `<n>`'s A-side is reset
+  - `complete a-side <n>` - Triggered when chapter `<n>`'s A-side is completed
+- **B-side specific:**
+  - `start b-side <n>` - Triggered when chapter `<n>`'s B-side is started
+  - `reset b-side <n>` - Triggered when chapter `<n>`'s B-side is reset
+  - `complete b-side <n>` - Triggered when chapter `<n>`'s B-side is completed
+- **C-side specific:**
+  - `start c-side <n>` - Triggered when chapter `<n>`'s C-side is started
+  - `reset c-side <n>` - Triggered when chapter `<n>`'s C-side is reset
+  - `complete c-side <n>` - Triggered when chapter `<n>`'s C-side is completed
+
+### Screen transition event
+- `<from screen> > <to screen>` - Triggered when transitioning between two screens (you can find the screen IDs by
+  enabling debug and hovering over the screen in the map editor.)
+
+### Collectable events
+- **Cassettes:**
+  - `cassette` - Triggered when any cassette is collected
+  - `chapter <n> cassette` - Triggered when the cassette in the specified chapter is collected
+  - `<n> total cassettes` - Triggered when a cassette is collected. `<n>` is the total number of cassettes collected in
+    the current file
+- **Heart Gems:**
+  - `heart` - Triggered when any heart gem is collected
+  - `chapter <n> heart` - Triggered when the heart gem in the specified chapter is collected
+  - `<n> total hearts` - Triggered when a heart gem is collected. `<n>` is the total number of heart gems collected in 
+    the current file
+- **Strawberries:**
+  - `strawberry` - Triggered when any strawberry is collected
+  - `<n> chapter strawberries` - Triggered when a total of `<n>` strawberries are collected in a chapter
+  - `<n> file strawberries` - Triggered when a total of `<n>` strawberries are collected in the file
+
+### Some nuances regarding resets: 
+
+If the next expected event in the route is the same as the reset event, the route will take precedence and the run 
+won't be reset. However, if the first event in the route is then detected (though again route takes precedence), the 
+run will reset and start over.
