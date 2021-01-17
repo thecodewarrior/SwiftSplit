@@ -1,0 +1,12 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start b-side 6 ## Start",
+        "a-06 > b-00 ## Reflection",
+        "b-10 > c-00 ## Rock Bottom",
+        "c-04 > d-00 ## Reprieve",
+        "complete b-side 6"
+    ]
+}
+

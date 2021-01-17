@@ -1,0 +1,11 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start b-side 2 ## Start",
+        "02 > 03 ## Combination Lock",
+        "07 > 08b ## Dream Altar",
+        "complete b-side 2"
+    ]
+}
+

@@ -1,0 +1,11 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start b-side 1 ## Start",
+        "03 > 04 ## Contraption",
+        "07 > 08 ## Scrap Pit",
+        "complete b-side 1"
+    ]
+}
+

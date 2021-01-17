@@ -1,0 +1,12 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start b-side 5 ## Start",
+        "a-02 > b-00 ## Central Chamber",
+        "b-09 > c-00 ## Through the Mirror",
+        "c-04 > d-00 ## Mix Master",
+        "complete b-side 5"
+    ]
+}
+

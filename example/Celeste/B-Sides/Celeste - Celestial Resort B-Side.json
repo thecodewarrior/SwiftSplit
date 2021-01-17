@@ -1,0 +1,12 @@
+{
+    "useFileTime": false,
+    "reset": "reset chapter",
+    "route": [
+        "start b-side 3 ## Start",
+        "05 > 06 ## Staff Quarters",
+        "10 > 11 ## Library",
+        "12 > 16 ## Rooftop",
+        "complete b-side 3"
+    ]
+}
+

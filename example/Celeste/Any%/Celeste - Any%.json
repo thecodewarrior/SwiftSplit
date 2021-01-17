@@ -1,0 +1,62 @@
+{
+    "useFileTime": true,
+    "reset": "reset chapter",
+    "route": [
+        "start chapter 0 ## Start Prologue",
+        "complete chapter 0",
+
+        "!start chapter 1 ## Start Forsaken City",
+        "!5 > 6 ## Crossing",
+        "!9 > 9b ## Chasm",
+        "complete chapter 1",
+
+        "!start chapter 2 ## Start Old Site",
+        "!d8 > d3 ## - Mirror",
+        "!3x > 3 ## Intervention",
+        "!10 > 2 ## - Escape",
+        "!13 > end_0 ## Awake",
+        "complete chapter 2",
+
+        "!start chapter 3 ## Start Celestial Resort",
+        "08-a > 09-b ## Huge Mess",
+        "!10-x > 11-x ## - Bottom",
+        "!09-b > 10-c ## - Top",
+        "!09-b > 11-b ## - Middle",
+        "09-b > 09-d ## Elevator Shaft",
+        "02-d > 00-d ## Presidential Suite",
+        "complete chapter 3",
+
+        "!start chapter 4 ## Start Golden Ridge",
+        "!a-09 > b-00 ## Shrine",
+        "!b-08 > c-00 ## Old Trail",
+        "!c-08 > d-00 ## Cliff Face",
+        "complete chapter 4",
+
+        "!start chapter 5 ## Start Mirror Temple",
+        "!a-13 > b-00 ## Depths",
+        "void > c-00 ## Unravelling",
+        "!c-13 > d-00 ## Search",
+        "d-20 > e-00 ## Rescue",
+        "complete chapter 5",
+
+        "!start chapter 6 ## Start Reflection",
+        "!start > 00 ## Lake",
+        "!02b > 04 ## Hollows",
+        "!20 > b-00 ## Reflection",
+        "b-03 > boss-00 ## Rock Bottom",
+        "!boss-13 > boss-14 ## Escalation",
+        "!boss-20 > after-00 ## Resolution",
+        "complete chapter 6",
+
+        "!start chapter 7 ## Start The Summit",
+        "a-06 > b-00 ## 500 M",
+        "b-09 > c-00 ## 1000 M",
+        "c-09 > d-00 ## 1500 M",
+        "d-11 > e-00b ## 2000 M",
+        "e-13 > f-00 ## 2500 M",
+        "f-11 > g-00 ## 3000 M",
+
+        "complete chapter 7 ## Finish the run"
+    ]
+}
+
