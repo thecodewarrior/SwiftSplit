@@ -30,6 +30,10 @@ Launching and using SwiftSplit is fairly simple, with only three broad steps.
 ### Connecting to [LiveSplit One](https://one.livesplit.org/)
 4. Copy the LiveSplit server URL displayed in SwiftSplit
 5. Click "Connect to Server" in LiveSplit One and paste that URL
+   - Note: SwiftSplit does not work with Safari. Safari doesn't let LiveSplit One connect to the SwiftSplit server, so 
+     LiveSplit will just stall at "Connecting…". The connection has been tested to work in Firefox and Chrome though, so 
+     you can use one of those. If you need to transfer your splits you can download them using the "export" button in 
+     the splits list screen.
    - Note: navigating away from the timer screen may make the server button say it isn't connected any more. This is a 
      bug. You can check that it's still connected with the "LiveSplit clients" field in SwiftSplit, which should read 
      "1". If that field reads "0", you need to connect. If it reads "2" or higher then you will need to save your splits 
