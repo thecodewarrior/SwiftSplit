@@ -221,6 +221,9 @@ class RouteEvent {
     var event: String
 
     init?(from jsonString: String) {
+        if jsonString.prefix(1) == "#" {
+            return nil
+        }
         guard let match = RouteEvent.pattern.firstMatch(in: jsonString, options: [], range: NSRange(jsonString.startIndex..<jsonString.endIndex, in: jsonString)) else {
             return nil
         }

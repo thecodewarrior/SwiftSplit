@@ -87,8 +87,8 @@ single state change frequently causes multiple events, generally with differing 
 Note that the *exact* text of an event is important. Spaces and capitalization have to match, with a couple additions:
 - Inserting an exclamation point (`!`) at the beginning of an event will cause that event to not trigger a split. This 
   can be useful when your route passes between two screens multiple times but you only want one split. 
-- Anything after a ` ##` (*exactly* one space and two pound signs) will be trimmed off. This can be useful for 
-  explaining events.
+- Anything after `##` will be trimmed off. This can be useful for explaining events.
+- Any event entries that start with `#` will be ignored, allowing you to "comment out" events.
 
 SwiftSplit has an "Event Stream" panel that displays events as they are triggered, which can be useful when creating 
 route files. (You can copy the text out of the panel to paste directly into the route file too).
