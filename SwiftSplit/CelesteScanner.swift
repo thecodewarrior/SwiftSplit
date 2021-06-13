@@ -14,19 +14,39 @@ import Foundation
 class CelesteScanner {
     var enableDebugPrinting: Bool = false
     
-    var header: UInt64 = 0
+    var pid: pid_t
+    var headerInfo: HeaderInfo? = nil {
+        didSet {
+            if let info = headerInfo {
+                self.headerSignature = MemscanSignature(from: info.signatureData)
+            } else {
+                self.headerSignature = nil
+            }
+        }
+    }
     var headerSignature: MemscanSignature? = nil
     var pointer: vm_address_t = 0
     let target: MemscanTarget
     let filter: MemscanFilter
 
     init(pid: pid_t) throws {
+        self.pid = pid
         target = try MemscanTarget(pid: pid)
         filter = MemscanFilter(startAddress: 0, endAddress: 0x0000700000000000)
     }
     
     func findHeader() throws {
         print("Scanning for the AutoSplitterData object header")
+        
+        if let data = UserDefaults.standard.value(forKey: "lastHeader") as? Data,
+            let lastHeader = try? PropertyListDecoder().decode(HeaderInfo.self, from: data) {
+            if lastHeader.pid == pid {
+                print("Found existing header for pid \(pid)")
+                headerInfo = lastHeader
+                return
+            }
+        }
+
         let bigboisignature = MemscanSignature(parsing:
             "7f00000000000000000000????????????????ffffffffffffffff000000000000000000000" +
             "000000000000000000000000000000000000000000000000000000000000000000000000000"
@@ -36,8 +56,9 @@ class CelesteScanner {
             let address = match.address - 5
             print(String(format: "  Found a candiate object at %016llx", address))
             let data = try target.read(at: address, count: 16)
-            headerSignature = MemscanSignature(from: data.buffer)
-            header = try readData(at: address).header
+            let info = HeaderInfo(pid: pid, signatureData: Array(data.buffer.bindMemory(to: UInt8.self)), header: try readData(at: address).header)
+            headerInfo = info
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(info), forKey: "lastHeader")
             return
         }
     }
@@ -62,14 +83,17 @@ class CelesteScanner {
         if let match = try scanner.next() {
             self.pointer = match.address
             print(String(format: "  Found the instance at %llx", match.address))
+        } else {
+            pointer = 0
         }
     }
     
     func getInfo() throws -> AutoSplitterInfo? {
         if pointer == 0 { try findData() }
         if pointer == 0 { return nil }
+        guard let headerInfo = self.headerInfo else { return nil }
         var data = try readData(at: pointer)
-        if data.header != self.header || data.headerPad != 0 {
+        if data.header != headerInfo.header || data.headerPad != 0 {
             try findData()
             if pointer == 0 { return nil }
             data = try readData(at: pointer)
@@ -138,6 +162,18 @@ class CelesteScanner {
         let data = try target.read(at: address - before, count: before + after)
         print("    Forward: \(data.debugString(withCursor: Int(before)))")
         print("    Reversed: \(data.debugStringReversed(withCursor: Int(before)))")
+    }
+}
+
+struct HeaderInfo: Codable {
+    var pid: pid_t
+    var signatureData: [UInt8]
+    var header: UInt64
+
+    init(pid: pid_t, signatureData: [UInt8], header: UInt64) {
+        self.pid = pid
+        self.signatureData = signatureData
+        self.header = header
     }
 }
 

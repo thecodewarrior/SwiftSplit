@@ -31,7 +31,7 @@ class ViewController: NSViewController, RouteBoxDelegate {
 
     // we will ignore the celeste instance that was open when we first launched (if any). We don't know if they're in a clean state.
     // we also ignore the pid once it has been connected to. this prevents attempting to reconnect immediately after the game closes and we disconnect
-    var ignorePid: pid_t?
+    var ignorePid: pid_t? = nil
     
     var hasRouteConfig = false
     var routeConfig = RouteConfig() {
@@ -49,7 +49,6 @@ class ViewController: NSViewController, RouteBoxDelegate {
         super.viewDidLoad()
 
         self.eventStream = Array(repeating: "", count: eventStreamLength)
-        self.ignorePid = findCelestePid()
 
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
             self.update()
@@ -123,7 +122,7 @@ class ViewController: NSViewController, RouteBoxDelegate {
         let pid = apps[0].processIdentifier
         
         if pid == ignorePid {
-            return nil // this celeste process was open when we launched, so we don't know that it's in a clean state.
+            return nil // we ran into an error connecting to this pid
         }
         
         return pid
@@ -138,8 +137,8 @@ class ViewController: NSViewController, RouteBoxDelegate {
             self.splitter = try CelesteSplitter(pid: pid, server: server)
             self.splitter?.routeConfig = routeConfig
             connectionStatusLabel.stringValue = "Connected"
-            self.ignorePid = pid
         } catch {
+            self.ignorePid = pid
             print("Error creating splitter: \(error)")
         }
     }

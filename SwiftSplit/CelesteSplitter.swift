@@ -29,7 +29,7 @@ class CelesteSplitter {
         self.server = server
         self.server.pauseGameTime() // make sure gameTimeRunning is accurate
         try scanner.findHeader()
-        if scanner.headerSignature == nil {
+        if scanner.headerInfo == nil {
             throw SplitterError.noHeader
         }
     }
