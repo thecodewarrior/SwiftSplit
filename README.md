@@ -94,21 +94,24 @@ SwiftSplit has an "Event Stream" panel that displays events as they are triggere
 route files. (You can copy the text out of the panel to paste directly into the route file too).
 
 ### Chapter start/end events
-- `reset chapter` - Triggered when any chapter is reset (either by restarting the chapter or exiting to the map)
+- `leave chapter` - Triggered when leaving any chapter (either by restarting the chapter, returning to the map, or
+  using "Save and Quit")
+- `leave chapter <n>` - Triggered when leaving chapter `<n>`
+- `start chapter` - Triggered when any chapter is started
 - `start chapter <n>` - Triggered when chapter `<n>` is started
-- `reset chapter <n>` - Triggered when chapter `<n>` is reset
+- `complete chapter` - Triggered when any chapter is completed
 - `complete chapter <n>` - Triggered when chapter `<n>` is completed
 - **A-side specific:**
   - `start a-side <n>` - Triggered when chapter `<n>`'s A-side is started
-  - `reset a-side <n>` - Triggered when chapter `<n>`'s A-side is reset
+  - `leave a-side <n>` - Triggered when leaving chapter `<n>`'s A-side
   - `complete a-side <n>` - Triggered when chapter `<n>`'s A-side is completed
 - **B-side specific:**
   - `start b-side <n>` - Triggered when chapter `<n>`'s B-side is started
-  - `reset b-side <n>` - Triggered when chapter `<n>`'s B-side is reset
+  - `leave b-side <n>` - Triggered when leaving chapter `<n>`'s B-side
   - `complete b-side <n>` - Triggered when chapter `<n>`'s B-side is completed
 - **C-side specific:**
   - `start c-side <n>` - Triggered when chapter `<n>`'s C-side is started
-  - `reset c-side <n>` - Triggered when chapter `<n>`'s C-side is reset
+  - `leave c-side <n>` - Triggered when leaving chapter `<n>`'s C-side
   - `complete c-side <n>` - Triggered when chapter `<n>`'s C-side is completed
 
 ### Screen transition event

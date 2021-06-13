@@ -1,6 +1,6 @@
 {
     "useFileTime": false,
-    "reset": "reset chapter",
+    "reset": "leave chapter",
     "route": [
         "start chapter 6 ## Start",
         "start > 00 ## Lake",

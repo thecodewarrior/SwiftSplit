@@ -1,6 +1,6 @@
 {
     "useFileTime": false,
-    "reset": "reset chapter",
+    "reset": "leave chapter",
     "route": [
         "start chapter 3 ## Start",
         "08-a > 09-b ## Huge Mess",

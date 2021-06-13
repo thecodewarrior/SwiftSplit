@@ -1,6 +1,6 @@
 {
     "useFileTime": true,
-    "reset": "reset chapter",
+    "reset": "leave chapter",
     "route": [
         "start chapter 0 ## Start Prologue",
         "complete chapter 0",

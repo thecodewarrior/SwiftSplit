@@ -1,6 +1,6 @@
 {
     "useFileTime": false,
-    "reset": "reset chapter",
+    "reset": "leave chapter",
     "route": [
         "start chapter 1 ## Start",
         "5 > 6 ## Crossing",

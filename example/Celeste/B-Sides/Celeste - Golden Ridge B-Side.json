@@ -1,6 +1,6 @@
 {
     "useFileTime": false,
-    "reset": "reset chapter",
+    "reset": "leave chapter",
     "route": [
         "start b-side 4 ## Start",
         "a-04 > b-00 ## Stepping Stones",

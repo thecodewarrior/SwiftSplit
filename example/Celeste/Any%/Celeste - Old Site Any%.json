@@ -1,6 +1,6 @@
 {
     "useFileTime": false,
-    "reset": "reset chapter",
+    "reset": "leave chapter",
     "route": [
         "start chapter 2 ## Start",
         "d8 > d3 ## - Mirror",

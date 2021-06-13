@@ -118,11 +118,11 @@ class CelesteSplitter {
             events.append(event)
         }
         if !new.chapterStarted && old.chapterStarted && !old.chapterComplete {
-            var event: Event = ["return to map", "reset chapter", "reset chapter \(old.chapter)"]
+            var event: Event = ["leave chapter", "leave chapter \(old.chapter)"]
             switch new.mode {
-            case .Normal: event.add(variant: "reset a-side \(old.chapter)")
-            case .BSide: event.add(variant: "reset b-side \(old.chapter)")
-            case .CSide: event.add(variant: "reset c-side \(old.chapter)")
+            case .Normal: event.add(variant: "leave a-side \(old.chapter)")
+            case .BSide: event.add(variant: "leave b-side \(old.chapter)")
+            case .CSide: event.add(variant: "leave c-side \(old.chapter)")
             default: break
             }
             events.append(event)
