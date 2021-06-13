@@ -71,7 +71,7 @@ class ViewController: NSViewController, RouteBoxDelegate {
         
         do {
             let events = try splitter.update()
-            eventStream = (eventStream + events.map { "\"\($0)\"" }).suffix(eventStreamLength)
+            eventStream = (eventStream + events.flatMap { $0.variants }).suffix(eventStreamLength)
         } catch {
             self.splitter = nil
             eventStream = Array(repeating: "", count: eventStreamLength)
@@ -215,8 +215,8 @@ class ViewController: NSViewController, RouteBoxDelegate {
             
         gameTimeLabel.stringValue = timeString
         
-        nextEventLabel.stringValue = splitter.routeIndex < routeConfig.route.count ?
-            "\"\(routeConfig.route[splitter.routeIndex])\" (\(splitter.routeIndex + 1)/\(routeConfig.route.count))"
+        nextEventLabel.stringValue = splitter.nextEventIndex < routeConfig.route.count ?
+            "\"\(routeConfig.route[splitter.nextEventIndex])\" (\(splitter.nextEventIndex + 1)/\(routeConfig.route.count))"
             : "<none>"
     }
 
