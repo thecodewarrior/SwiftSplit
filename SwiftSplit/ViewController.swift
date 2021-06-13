@@ -50,7 +50,7 @@ class ViewController: NSViewController, RouteBoxDelegate {
 
         self.eventStream = Array(repeating: "", count: eventStreamLength)
 
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0/30.0, repeats: true) { _ in
             self.update()
             self.updateInfoViews()
         }

@@ -79,7 +79,7 @@ Here's an example for Old Site Any%:
 ```
 
 ## Events
-Events are triggered when SwiftSplit observes a change in the game state, which is checked 10 times every second. A 
+Events are triggered when SwiftSplit observes a change in the game state, which is checked 30 times every second. A 
 single state change frequently causes multiple events, generally with differing levels of specificity. 
 
 Note that the *exact* text of an event is important. Spaces and capitalization have to match, with a couple additions:
