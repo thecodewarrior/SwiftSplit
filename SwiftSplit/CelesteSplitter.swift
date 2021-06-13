@@ -22,6 +22,11 @@ struct Event {
     mutating func add(variant: String) {
         self.variants.insert(variant)
     }
+    mutating func add(variants: String...) {
+        for variant in variants {
+            self.variants.insert(variant)
+        }
+    }
 }
 
 extension Event : ExpressibleByArrayLiteral {
@@ -123,6 +128,13 @@ class CelesteSplitter {
             case .Normal: event.add(variant: "leave a-side \(old.chapter)")
             case .BSide: event.add(variant: "leave b-side \(old.chapter)")
             case .CSide: event.add(variant: "leave c-side \(old.chapter)")
+            default: break
+            }
+            event.add(variants: "reset chapter", "reset chapter \(old.chapter)")
+            switch new.mode {
+            case .Normal: event.add(variant: "reset a-side \(old.chapter)")
+            case .BSide: event.add(variant: "reset b-side \(old.chapter)")
+            case .CSide: event.add(variant: "reset c-side \(old.chapter)")
             default: break
             }
             events.append(event)
