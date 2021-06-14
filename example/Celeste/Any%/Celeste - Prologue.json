@@ -1,9 +1,0 @@
-{
-    "useFileTime": false,
-    "reset": "leave chapter",
-    "route": [
-        "start chapter 0",
-        "complete chapter 0"
-    ]
-}
-
