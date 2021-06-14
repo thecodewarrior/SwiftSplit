@@ -1,0 +1,12 @@
+{
+    "useFileTime": false,
+    "reset": "leave chapter",
+    "route": [
+        "start b-side 9 ## Start",
+        "01 > a-00 ## Into the Core",
+        "a-05 > b-00 ## Burning or Freezing",
+        "b-05 > c-01 ## Heartbeat",
+        "complete b-side 9"
+    ]
+}
+

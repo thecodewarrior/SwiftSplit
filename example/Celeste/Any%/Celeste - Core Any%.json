@@ -1,0 +1,12 @@
+{
+    "useFileTime": false,
+    "reset": "leave chapter",
+    "route": [
+        "start chapter 9 ## Start",
+        "02 > a-00 ## Into the Core",
+        "b-07 > c-00 ## Hot and Cold",
+        "c-04 > d-00 ## Heart of the Mountain",
+        "complete chapter 9"
+    ]
+}
+

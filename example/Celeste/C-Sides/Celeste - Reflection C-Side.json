@@ -1,0 +1,11 @@
+{
+    "useFileTime": false,
+    "reset": "leave chapter",
+    "route": [
+        "start c-side 6 ## Start",
+        "00 > 01",
+        "01 > 02",
+        "complete c-side 6"
+    ]
+}
+
