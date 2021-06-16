@@ -280,6 +280,7 @@ struct AutoSplitterData: Equatable {
 }
 
 enum ChapterMode : Equatable {
+    case Menu
     case Normal
     case BSide
     case CSide
@@ -331,6 +332,8 @@ class AutoSplitterInfo {
         
         self.chapter = Int(data.chapter)
         switch data.mode {
+        case -1:
+            self.mode = .Menu
         case 0:
             self.mode = .Normal
         case 1:
@@ -353,22 +356,4 @@ class AutoSplitterInfo {
         self.fileCassettes = Int(data.fileCassettes)
         self.fileHearts = Int(data.fileHearts)
     }
-    
-    func stableStateEquals(other: AutoSplitterInfo) -> Bool {
-        return self.chapter == other.chapter &&
-            self.mode == other.mode &&
-            self.level == other.level &&
-            self.timerActive == other.timerActive &&
-            self.chapterStarted == other.chapterStarted &&
-            self.chapterComplete == other.chapterComplete &&
-//            self.chapterTime == other.chapterTime &&
-            self.chapterStrawberries == other.chapterStrawberries &&
-            self.chapterCassette == other.chapterCassette &&
-            self.chapterHeart == other.chapterHeart &&
-//            self.fileTime == other.fileTime &&
-            self.fileStrawberries == other.fileStrawberries &&
-            self.fileCassettes == other.fileCassettes &&
-            self.fileHearts == other.fileHearts
-    }
-
 }

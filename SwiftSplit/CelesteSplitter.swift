@@ -59,6 +59,7 @@ class CelesteSplitter {
         }
     }
     
+    private var time: Double = 0.0
     private var gameTimeRunning = false
     private(set) var nextEventIndex = 0
     
@@ -73,12 +74,13 @@ class CelesteSplitter {
             return []
         }
         let events = getEvents(from: autoSplitterInfo, to: info)
-//        logStateChange(from: autoSplitterInfo, to: info)
+        logStateChange(from: autoSplitterInfo, to: info)
         autoSplitterInfo = info
         
-        let time = routeConfig.useFileTime ? autoSplitterInfo.fileTime : autoSplitterInfo.chapterTime
+        if autoSplitterInfo.mode != .Menu { // save and quit resets the chapter timer to zero, but we don't want to reset it for QTM strats
+            time = routeConfig.useFileTime ? autoSplitterInfo.fileTime : autoSplitterInfo.chapterTime
+        }
         server.setGameTime(seconds: time)
-        
         processEvents(events)
         
         // when using the chapter time, `timerActive` will be true before the chapter time starts ticking.
@@ -94,15 +96,29 @@ class CelesteSplitter {
     var lastStateTime = DispatchTime.now()
 
     func logStateChange(from old: AutoSplitterInfo, to new: AutoSplitterInfo) {
-        if !old.stableStateEquals(other: new) {
+        let comparisons = [
+            (name: "chapter", old: "\(old.chapter)", new: "\(new.chapter)"),
+            (name: "mode", old: "\(old.mode)", new: "\(new.mode)"),
+            (name: "level", old: "\(old.level)", new: "\(new.level)"),
+            (name: "timerActive", old: "\(old.timerActive)", new: "\(new.timerActive)"),
+            (name: "chapterStarted", old: "\(old.chapterStarted)", new: "\(new.chapterStarted)"),
+            (name: "chapterComplete", old: "\(old.chapterComplete)", new: "\(new.chapterComplete)"),
+            // (name: "chapterTime", old: "\(old.chapterTime)", new: "\(new.chapterTime)"),
+            (name: "chapterStrawberries", old: "\(old.chapterStrawberries)", new: "\(new.chapterStrawberries)"),
+            (name: "chapterCassette", old: "\(old.chapterCassette)", new: "\(new.chapterCassette)"),
+            (name: "chapterHeart", old: "\(old.chapterHeart)", new: "\(new.chapterHeart)"),
+            // (name: "fileTime", old: "\(old.fileTime)", new: "\(new.fileTime)"),
+            (name: "fileStrawberries", old: "\(old.fileStrawberries)", new: "\(new.fileStrawberries)"),
+            (name: "fileCassettes", old: "\(old.fileCassettes)", new: "\(new.fileCassettes)"),
+            (name: "fileHearts", old: "\(old.fileHearts)", new: "\(new.fileHearts)"),
+        ]
+        let changes = comparisons.filter { $0.old != $0.new }
+
+        if !changes.isEmpty {
             let currentTime = DispatchTime.now()
             let delta = Double(currentTime.uptimeNanoseconds - lastStateTime.uptimeNanoseconds) / 1_000_000_000
             print(
-                "[\(delta)] " +
-                    "chapter: \(new.chapter), mode: \(new.mode), level: \(new.level), timerActive: \(new.timerActive), " +
-                    "chapterStarted: \(new.chapterStarted), chapterComplete: \(new.chapterComplete), chapterTime: \(new.chapterTime), " +
-                    "chapterStrawberries: \(new.chapterStrawberries), chapterCassette: \(new.chapterCassette), chapterHeart: \(new.chapterHeart), fileTime: \(new.fileTime), " +
-                "fileStrawberries: \(new.fileStrawberries), fileCassettes: \(new.fileCassettes), fileHearts: \(new.fileHearts)"
+                "[real delta: \(delta), chapter: \(new.chapterTime), file: \(new.fileTime)] " + changes.map { "\($0.name): \($0.old) -> \($0.new)" }.joined(separator: ", ")
             )
             lastStateTime = currentTime
         }
@@ -154,13 +170,37 @@ class CelesteSplitter {
             events.append(["\(old.level) > \(new.level)"])
         }
         if new.chapterCassette && !old.chapterCassette {
-            events.append(["cassette", "chapter \(new.chapter) cassette", "\(new.fileCassettes) total cassettes"])
+            events.append([
+                "collect cassette",
+                "collect chapter \(new.chapter) cassette",
+                "collect \(new.fileCassettes) total cassettes",
+                // compat:
+                "cassette",
+                "chapter \(new.chapter) cassette",
+                "\(new.fileCassettes) total cassettes"
+            ])
         }
         if new.chapterHeart && !old.chapterHeart {
-            events.append(["heart", "chapter \(new.chapter) heart", "\(new.fileHearts) total hearts"])
+            events.append([
+                "collect heart",
+                "collect chapter \(new.chapter) heart",
+                "collect \(new.fileHearts) total hearts",
+                // compat:
+                "heart",
+                "chapter \(new.chapter) heart",
+                "\(new.fileHearts) total hearts"
+            ])
         }
         if new.chapterStrawberries > old.chapterStrawberries {
-            events.append(["strawberry", "\(new.chapterStrawberries) chapter strawberries", "\(new.fileStrawberries) file strawberries"])
+            events.append([
+                "collect strawberry",
+                "collect \(new.chapterStrawberries) chapter strawberries",
+                "collect \(new.fileStrawberries) file strawberries",
+                // compat:
+                "strawberry",
+                "\(new.chapterStrawberries) chapter strawberries",
+                "\(new.fileStrawberries) file strawberries"
+            ])
         }
         return events
     }
