@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD5E946B267A52B900CFAB31 /* EventStreamItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5E9469267A52B900CFAB31 /* EventStreamItem.swift */; };
+		CD5E946C267A52B900CFAB31 /* EventStreamItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD5E946A267A52B900CFAB31 /* EventStreamItem.xib */; };
+		CD5E946E267A5ED300CFAB31 /* EventListDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5E946D267A5ED300CFAB31 /* EventListDelegate.swift */; };
 		CD7CDBE5256F5D0D002AE46F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBE4256F5D0D002AE46F /* AppDelegate.swift */; };
 		CD7CDBE7256F5D0D002AE46F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDBE6256F5D0D002AE46F /* ViewController.swift */; };
 		CD7CDBE9256F5D0F002AE46F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD7CDBE8256F5D0F002AE46F /* Assets.xcassets */; };
@@ -23,6 +26,9 @@
 
 /* Begin PBXFileReference section */
 		2557401E37458142957F7D9D /* Pods-SwiftSplit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSplit.debug.xcconfig"; path = "Target Support Files/Pods-SwiftSplit/Pods-SwiftSplit.debug.xcconfig"; sourceTree = "<group>"; };
+		CD5E9469267A52B900CFAB31 /* EventStreamItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStreamItem.swift; sourceTree = "<group>"; };
+		CD5E946A267A52B900CFAB31 /* EventStreamItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventStreamItem.xib; sourceTree = "<group>"; };
+		CD5E946D267A5ED300CFAB31 /* EventListDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListDelegate.swift; sourceTree = "<group>"; };
 		CD7CDBE1256F5D0D002AE46F /* SwiftSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD7CDBE4256F5D0D002AE46F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD7CDBE6256F5D0D002AE46F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -97,7 +103,10 @@
 				CD7CDC06256F8A21002AE46F /* Core */,
 				CD7CDBE4256F5D0D002AE46F /* AppDelegate.swift */,
 				CD7CDBE6256F5D0D002AE46F /* ViewController.swift */,
+				CD5E946D267A5ED300CFAB31 /* EventListDelegate.swift */,
 				CD7CDC2725717D2D002AE46F /* CelesteSplitter.swift */,
+				CD5E9469267A52B900CFAB31 /* EventStreamItem.swift */,
+				CD5E946A267A52B900CFAB31 /* EventStreamItem.xib */,
 				CD7CDBE8256F5D0F002AE46F /* Assets.xcassets */,
 				CD7CDBEA256F5D0F002AE46F /* Main.storyboard */,
 				CDA94456257382D300DB2A85 /* RouteBox.swift */,
@@ -183,6 +192,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD5E946C267A52B900CFAB31 /* EventStreamItem.xib in Resources */,
 				CD7CDBE9256F5D0F002AE46F /* Assets.xcassets in Resources */,
 				CD7CDBEC256F5D0F002AE46F /* Main.storyboard in Resources */,
 			);
@@ -241,9 +251,11 @@
 				CD7CDBFE256F5DFC002AE46F /* MemoryScanner.swift in Sources */,
 				CD7CDC00256F5DFC002AE46F /* memory_scanner.c in Sources */,
 				CD7CDBE7256F5D0D002AE46F /* ViewController.swift in Sources */,
+				CD5E946E267A5ED300CFAB31 /* EventListDelegate.swift in Sources */,
 				CDA94457257382D300DB2A85 /* RouteBox.swift in Sources */,
 				CD7CDBFF256F5DFC002AE46F /* CelesteScanner.swift in Sources */,
 				CD7CDC05256F7304002AE46F /* SimpleWebSocketServer.swift in Sources */,
+				CD5E946B267A52B900CFAB31 /* EventStreamItem.swift in Sources */,
 				CD7CDBE5256F5D0D002AE46F /* AppDelegate.swift in Sources */,
 				CD7CDC2825717D2D002AE46F /* CelesteSplitter.swift in Sources */,
 			);

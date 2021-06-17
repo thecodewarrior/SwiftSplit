@@ -12,32 +12,52 @@ enum SplitterError: Error {
     case noHeader
 }
 
-struct Event {
-    var variants: Set<String>
-    
-    init() {
-        self.variants = Set()
-    }
-    
-    mutating func add(variant: String) {
-        self.variants.insert(variant)
-    }
-    mutating func add(variants: String...) {
-        for variant in variants {
-            self.variants.insert(variant)
+enum VariantType: Equatable {
+    case normal(specificity: Int)
+    case legacy
+}
+
+extension VariantType {
+    var sortOrder: Int {
+        get {
+            switch self {
+            case .normal(specificity: let spec):
+                return spec
+            case .legacy:
+                return Int.max
+            }
         }
     }
 }
 
-extension Event : ExpressibleByArrayLiteral {
-    init(arrayLiteral elements: String...) {
-        self.init()
-        for element in elements {
-            self.add(variant: element)
-        }
+struct EventVariant {
+    var event: String
+    var type: VariantType
+    
+    static func legacy(_ event: String) -> EventVariant {
+        return EventVariant(event: event, type: .legacy)
     }
     
-    typealias ArrayLiteralElement = String
+    static func normal(_ event: String, specificity: Int) -> EventVariant {
+        return EventVariant(event: event, type: .normal(specificity: specificity))
+    }
+}
+
+struct Event {
+    var variants: [EventVariant] = []
+    
+    init(_ variants: EventVariant...) {
+        self.variants = variants
+    }
+    
+    mutating func add(variant: EventVariant) {
+        self.variants.append(variant)
+    }
+    mutating func add(variants: EventVariant...) {
+        for variant in variants {
+            self.variants.append(variant)
+        }
+    }
 }
 
 /**
@@ -126,85 +146,106 @@ class CelesteSplitter {
     
     func getEvents(from old: AutoSplitterInfo, to new: AutoSplitterInfo) -> [Event] {
         var events: [Event] = []
-        
+
         // if we don't check `new.chapterComplete`, the summit credits trigger the autosplitter
         if new.chapterStarted && !old.chapterStarted && !new.chapterComplete {
-            var event: Event = ["start chapter", "start chapter \(new.chapter)"]
+            var event = Event(
+                .normal("enter chapter", specificity: 0),
+                .normal("enter chapter \(new.chapter)", specificity: 0)
+            )
             switch new.mode {
-            case .Normal: event.add(variant: "start a-side \(new.chapter)")
-            case .BSide: event.add(variant: "start b-side \(new.chapter)")
-            case .CSide: event.add(variant: "start c-side \(new.chapter)")
+            case .Normal: event.add(variant: .normal("enter a-side \(new.chapter)", specificity: 0))
+            case .BSide: event.add(variant: .normal("enter b-side \(new.chapter)", specificity: 0))
+            case .CSide: event.add(variant: .normal("enter c-side \(new.chapter)", specificity: 0))
+            default: break
+            }
+            
+            event.add(variants:
+                .legacy("start chapter"),
+                      .legacy("start chapter \(new.chapter)")
+            )
+            switch new.mode {
+            case .Normal: event.add(variant: .legacy("start a-side \(new.chapter)"))
+            case .BSide: event.add(variant: .legacy("start b-side \(new.chapter)"))
+            case .CSide: event.add(variant: .legacy("start c-side \(new.chapter)"))
             default: break
             }
             events.append(event)
         }
         if !new.chapterStarted && old.chapterStarted && !old.chapterComplete {
-            var event: Event = ["leave chapter", "leave chapter \(old.chapter)"]
+            var event: Event = Event(
+                .normal("leave chapter", specificity: 0),
+                .normal("leave chapter \(old.chapter)", specificity: 0)
+            )
             switch new.mode {
-            case .Normal: event.add(variant: "leave a-side \(old.chapter)")
-            case .BSide: event.add(variant: "leave b-side \(old.chapter)")
-            case .CSide: event.add(variant: "leave c-side \(old.chapter)")
+            case .Normal: event.add(variant: .normal("leave a-side \(old.chapter)", specificity: 0))
+            case .BSide: event.add(variant: .normal("leave b-side \(old.chapter)", specificity: 0))
+            case .CSide: event.add(variant: .normal("leave c-side \(old.chapter)", specificity: 0))
             default: break
             }
-            event.add(variants: "reset chapter", "reset chapter \(old.chapter)")
+            
+            event.add(variants: .legacy("reset chapter"), .legacy("reset chapter \(old.chapter)"))
             switch new.mode {
-            case .Normal: event.add(variant: "reset a-side \(old.chapter)")
-            case .BSide: event.add(variant: "reset b-side \(old.chapter)")
-            case .CSide: event.add(variant: "reset c-side \(old.chapter)")
+            case .Normal: event.add(variant: .legacy("reset a-side \(old.chapter)"))
+            case .BSide: event.add(variant: .legacy("reset b-side \(old.chapter)"))
+            case .CSide: event.add(variant: .legacy("reset c-side \(old.chapter)"))
             default: break
             }
             events.append(event)
         }
         if new.chapterComplete && !old.chapterComplete {
-            var event: Event = ["complete chapter", "complete chapter \(old.chapter)"]
+            var event: Event = Event(
+                .normal("complete chapter", specificity: 0),
+                .normal("complete chapter \(old.chapter)", specificity: 0)
+            )
             switch new.mode {
-            case .Normal: event.add(variant: "complete a-side \(old.chapter)")
-            case .BSide: event.add(variant: "complete b-side \(old.chapter)")
-            case .CSide: event.add(variant: "complete c-side \(old.chapter)")
+            case .Normal: event.add(variant: .normal("complete a-side \(old.chapter)", specificity: 0))
+            case .BSide: event.add(variant: .normal("complete b-side \(old.chapter)", specificity: 0))
+            case .CSide: event.add(variant: .normal("complete c-side \(old.chapter)", specificity: 0))
             default: break
             }
             events.append(event)
         }
         
         if new.level != old.level && old.level != "" && new.level != "" {
-            events.append(["\(old.level) > \(new.level)"])
+            events.append(Event(.normal("\(old.level) > \(new.level)", specificity: 0)))
         }
         if new.chapterCassette && !old.chapterCassette {
-            events.append([
-                "collect cassette",
-                "collect chapter \(new.chapter) cassette",
-                "collect \(new.fileCassettes) total cassettes",
+            events.append(Event(
+                .normal("collect cassette", specificity: 0),
+                .normal("collect chapter \(new.chapter) cassette", specificity: 0),
+                .normal("collect \(new.fileCassettes) total cassettes", specificity: 0),
                 // compat:
-                "cassette",
-                "chapter \(new.chapter) cassette",
-                "\(new.fileCassettes) total cassettes"
-            ])
+                .legacy("cassette"),
+                .legacy("chapter \(new.chapter) cassette"),
+                .legacy("\(new.fileCassettes) total cassettes")
+            ))
         }
         if new.chapterHeart && !old.chapterHeart {
-            events.append([
-                "collect heart",
-                "collect chapter \(new.chapter) heart",
-                "collect \(new.fileHearts) total hearts",
+            events.append(Event(
+                .normal("collect heart", specificity: 0),
+                .normal("collect chapter \(new.chapter) heart", specificity: 0),
+                .normal("collect \(new.fileHearts) total hearts", specificity: 0),
                 // compat:
-                "heart",
-                "chapter \(new.chapter) heart",
-                "\(new.fileHearts) total hearts"
-            ])
+                .legacy("heart"),
+                .legacy("chapter \(new.chapter) heart"),
+                .legacy("\(new.fileHearts) total hearts")
+            ))
         }
         if new.chapterStrawberries > old.chapterStrawberries {
-            events.append([
-                "collect strawberry",
-                "collect \(new.chapterStrawberries) chapter strawberries",
-                "collect \(new.fileStrawberries) file strawberries",
+            events.append(Event(
+                .normal("collect strawberry", specificity: 0),
+                .normal("collect \(new.chapterStrawberries) chapter strawberries", specificity: 0),
+                .normal("collect \(new.fileStrawberries) file strawberries", specificity: 0),
                 // compat:
-                "strawberry",
-                "\(new.chapterStrawberries) chapter strawberries",
-                "\(new.fileStrawberries) file strawberries"
-            ])
+                .legacy("strawberry"),
+                .legacy("\(new.chapterStrawberries) chapter strawberries"),
+                .legacy("\(new.fileStrawberries) file strawberries")
+            ))
         }
         return events
     }
-    
+
     func processEvents(_ events: [Event]) {
         if events.count == 0 {
             return
@@ -293,7 +334,11 @@ class RouteEvent {
     }
 
     func matches(event: Event) -> Bool {
-        return event.variants.contains(self.event)
+        return event.variants.contains(where: { self.matches(variant: $0) })
+    }
+    
+    func matches(variant: EventVariant) -> Bool {
+        return self.event == variant.event
     }
     
     private static let pattern = try! NSRegularExpression(
@@ -305,6 +350,4 @@ extension RouteEvent : CustomStringConvertible {
     var description: String {
         (silent ? "!" : "") + event
     }
-    
-    
 }

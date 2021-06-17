@@ -38,13 +38,9 @@ class CelesteScanner {
     func findHeader() throws {
         print("Scanning for the AutoSplitterData object header")
         
-        if let data = UserDefaults.standard.value(forKey: "lastHeader") as? Data,
-            let lastHeader = try? PropertyListDecoder().decode(HeaderInfo.self, from: data) {
-            if lastHeader.pid == pid {
-                print("Found existing header for pid \(pid)")
-                headerInfo = lastHeader
-                return
-            }
+        if CelesteScanner.canImmediatelyConnect(pid: pid) {
+            headerInfo = CelesteScanner.lastHeader
+            return
         }
 
         let bigboisignature = MemscanSignature(parsing:
@@ -58,7 +54,7 @@ class CelesteScanner {
             let data = try target.read(at: address, count: 16)
             let info = HeaderInfo(pid: pid, signatureData: Array(data.buffer.bindMemory(to: UInt8.self)), header: try readData(at: address).header)
             headerInfo = info
-            UserDefaults.standard.set(try? PropertyListEncoder().encode(info), forKey: "lastHeader")
+            CelesteScanner.lastHeader = headerInfo
             return
         }
     }
@@ -162,6 +158,27 @@ class CelesteScanner {
         let data = try target.read(at: address - before, count: before + after)
         print("    Forward: \(data.debugString(withCursor: Int(before)))")
         print("    Reversed: \(data.debugStringReversed(withCursor: Int(before)))")
+    }
+    
+    static var lastHeader: HeaderInfo? {
+        get {
+            if let data = UserDefaults.standard.value(forKey: "lastHeader") as? Data,
+                let lastHeader = try? PropertyListDecoder().decode(HeaderInfo.self, from: data) {
+                return lastHeader
+            }
+            return nil
+        }
+        set(value) {
+            if let value = value {
+                UserDefaults.standard.set(try? PropertyListEncoder().encode(value), forKey: "lastHeader")
+            } else {
+                UserDefaults.standard.removeObject(forKey: "lastHeader")
+            }
+        }
+    }
+    
+    static func canImmediatelyConnect(pid: pid_t) -> Bool {
+        return CelesteScanner.lastHeader?.pid == pid
     }
 }
 

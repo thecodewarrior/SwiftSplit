@@ -15,7 +15,7 @@ class ViewController: NSViewController, RouteBoxDelegate {
     @IBOutlet weak var gameTimeLabel: NSTextField!
     @IBOutlet weak var nextEventLabel: NSTextField!
     @IBOutlet weak var livesplitClientsLabel: NSTextField!
-    @IBOutlet weak var eventStreamLabel: NSTextField!
+    @IBOutlet weak var eventStreamCollectionView: NSCollectionView!
     
     @IBOutlet weak var routeBox: RouteBox!
     @IBOutlet weak var loadedRouteLabel: NSTextField!
@@ -23,11 +23,11 @@ class ViewController: NSViewController, RouteBoxDelegate {
     
     @IBOutlet weak var connectionStatusLabel: NSTextField!
     @IBOutlet weak var celesteDataLabel: NSTextField!
-    
+
     var showRouteData = false
     var showCelesteData = false
     let eventStreamLength = 6
-    var eventStream: [String] = []
+    var eventStream = EventListDelegate()
 
     // we will ignore the celeste instance that was open when we first launched (if any). We don't know if they're in a clean state.
     // we also ignore the pid once it has been connected to. this prevents attempting to reconnect immediately after the game closes and we disconnect
@@ -48,16 +48,28 @@ class ViewController: NSViewController, RouteBoxDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.eventStream = Array(repeating: "", count: eventStreamLength)
 
         timer = Timer.scheduledTimer(withTimeInterval: 1.0/30.0, repeats: true) { _ in
             self.update()
             self.updateInfoViews()
         }
 
-        eventStreamLabel.stringValue = eventStream.joined(separator: "\n")
         server = try? LiveSplitServer(host: "localhost", port: 8777)
         routeBox.delegate = self
+        
+        if let layout = eventStreamCollectionView.collectionViewLayout as? NSCollectionViewGridLayout {
+            layout.maximumNumberOfColumns = 1
+            layout.maximumItemSize = CGSize(width: 0, height: 14)
+            layout.minimumItemSize = CGSize(width: 0, height: 14)
+            layout.margins = NSEdgeInsets(top: 12, left: 20, bottom: 12, right: 20)
+            layout.minimumLineSpacing = 3
+        }
+        
+        eventStream.collectionView = eventStreamCollectionView
+        eventStreamCollectionView.delegate = eventStream
+        eventStreamCollectionView.dataSource = eventStream
+        let nib = NSNib(nibNamed: "EventStreamItem", bundle: nil)
+        eventStreamCollectionView.register(nib, forItemWithIdentifier: EventListDelegate.itemIdentifier)
     }
 
     func update() {
@@ -71,15 +83,13 @@ class ViewController: NSViewController, RouteBoxDelegate {
         
         do {
             let events = try splitter.update()
-            eventStream = (eventStream + events.flatMap { $0.variants }).suffix(eventStreamLength)
+            eventStream.add(events: events)
         } catch {
             self.splitter = nil
-            eventStream = Array(repeating: "", count: eventStreamLength)
             connectionStatusLabel.stringValue = "Disconnected"
             ignorePid = nil // Everest causes a disconnect but relaunches with the same PID
             print("Error getting info: \(error)")
         }
-        eventStreamLabel.stringValue = eventStream.joined(separator: "\n")
     }
     
     func tryConnecting() {
@@ -92,6 +102,10 @@ class ViewController: NSViewController, RouteBoxDelegate {
 
         var connectionAttempts = 0
         self.connectionStatusLabel.stringValue = "Connecting…"
+        if CelesteScanner.canImmediatelyConnect(pid: pid) {
+            self.connect(pid: pid)
+            return
+        }
         connectTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
             if NSRunningApplication(processIdentifier: pid) == nil {
                 self.connectTimer?.invalidate()
