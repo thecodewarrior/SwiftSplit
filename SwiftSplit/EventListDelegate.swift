@@ -12,6 +12,7 @@ import Cocoa
 class EventListDelegate: NSObject, NSCollectionViewDelegate, NSCollectionViewDataSource {
     static let itemIdentifier = NSUserInterfaceItemIdentifier(rawValue: "eventStreamItem")
     
+    let maxEntries = 100
     var eventEntries: [String] = []
     weak var collectionView: NSCollectionView!
     var scrollView: NSScrollView {
@@ -29,6 +30,14 @@ class EventListDelegate: NSObject, NSCollectionViewDelegate, NSCollectionViewDat
             event.variants.sorted(by: { $0.type.sortOrder < $1.type.sortOrder })
         }.filter { $0.type != VariantType.legacy }
         let entries = variants.map { $0.event }
+        
+        let removeCount = eventEntries.count + entries.count - maxEntries
+        
+        if removeCount > 0 {
+            eventEntries.removeFirst(removeCount)
+            let range = (0 ..< removeCount).map { IndexPath(item: $0, section: 0) }
+            self.collectionView.deleteItems(at: Set(range))
+        }
         
         let rangeStart = self.eventEntries.count
         self.eventEntries.append(contentsOf: entries)
