@@ -214,33 +214,29 @@ class CelesteSplitter {
             events.append(Event(
                 .normal("collect cassette", specificity: 0),
                 .normal("collect chapter \(new.chapter) cassette", specificity: 0),
-                .normal("collect \(new.fileCassettes) total cassettes", specificity: 0),
+                .normal("\(new.fileCassettes) total cassettes", specificity: 0),
                 // compat:
                 .legacy("cassette"),
-                .legacy("chapter \(new.chapter) cassette"),
-                .legacy("\(new.fileCassettes) total cassettes")
+                .legacy("chapter \(new.chapter) cassette")
             ))
         }
         if new.chapterHeart && !old.chapterHeart {
             events.append(Event(
                 .normal("collect heart", specificity: 0),
                 .normal("collect chapter \(new.chapter) heart", specificity: 0),
-                .normal("collect \(new.fileHearts) total hearts", specificity: 0),
+                .normal("\(new.fileHearts) total hearts", specificity: 0),
                 // compat:
                 .legacy("heart"),
-                .legacy("chapter \(new.chapter) heart"),
-                .legacy("\(new.fileHearts) total hearts")
+                .legacy("chapter \(new.chapter) heart")
             ))
         }
         if new.chapterStrawberries > old.chapterStrawberries {
             events.append(Event(
                 .normal("collect strawberry", specificity: 0),
-                .normal("collect \(new.chapterStrawberries) chapter strawberries", specificity: 0),
-                .normal("collect \(new.fileStrawberries) file strawberries", specificity: 0),
+                .normal("\(new.chapterStrawberries) chapter strawberries", specificity: 0),
+                .normal("\(new.fileStrawberries) file strawberries", specificity: 0),
                 // compat:
-                .legacy("strawberry"),
-                .legacy("\(new.chapterStrawberries) chapter strawberries"),
-                .legacy("\(new.fileStrawberries) file strawberries")
+                .legacy("strawberry")
             ))
         }
         return events
@@ -342,7 +338,7 @@ class RouteEvent {
     }
     
     private static let pattern = try! NSRegularExpression(
-        pattern: #"^(!)?\s*(.*?)\s*(##.*)?$"#
+        pattern: #"^\s*(!)?\s*(.*?)\s*(#.*)?$"#
     )
 }
 
