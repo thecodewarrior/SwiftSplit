@@ -24,6 +24,7 @@ class ViewController: NSViewController, RouteBoxDelegate {
     @IBOutlet weak var connectionStatusLabel: NSTextField!
     @IBOutlet weak var celesteDataLabel: NSTextField!
 
+    var livesplitEverConnected = false
     var showRouteData = false
     var showCelesteData = false
     let eventStreamLength = 6
@@ -55,6 +56,7 @@ class ViewController: NSViewController, RouteBoxDelegate {
         }
 
         server = try? LiveSplitServer(host: "localhost", port: 8777)
+        server?.allowMultipleClients = false
         routeBox.delegate = self
         
         if let layout = eventStreamCollectionView.collectionViewLayout as? NSCollectionViewGridLayout {
@@ -73,7 +75,11 @@ class ViewController: NSViewController, RouteBoxDelegate {
     }
 
     func update() {
-        livesplitClientsLabel.stringValue = "\(server?.connectedClients ?? 0)"
+        let livesplitConnected = server?.connectedClients ?? 0 > 0
+        livesplitEverConnected = livesplitEverConnected || livesplitConnected
+        if(livesplitEverConnected) {
+            livesplitClientsLabel.stringValue = livesplitConnected ? "Connected" : "Disconnected"
+        }
         if self.splitter == nil {
             tryConnecting()
         }

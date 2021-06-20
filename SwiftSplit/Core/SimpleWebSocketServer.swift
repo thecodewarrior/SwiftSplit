@@ -20,14 +20,22 @@ class SimpleWebSocketServer: ChannelInboundHandler {
     private let channelsSyncQueue = DispatchQueue(label: "channelsQueue")
     private var channels: [ObjectIdentifier: Channel] = [:]
     private var awaitingClose: Set<ObjectIdentifier> = Set()
+    var allowMultipleClients: Bool = true
     var connectedClients: Int {
         get { channels.count }
     }
     
     func handlerAdded(ctx: ChannelHandlerContext) {
         let channel = ctx.channel
-        self.channelsSyncQueue.async {
-            self.channels[ObjectIdentifier(channel)] = channel
+        if(!allowMultipleClients) {
+            self.channelsSyncQueue.async {
+                self.channels.forEach { (_, channel) in
+                    let frame = WebSocketFrame(fin: true, opcode: .connectionClose, data: channel.allocator.buffer(capacity: 0))
+                    channel.writeAndFlush(self.wrapOutboundOut(frame), promise: nil)
+                    self.awaitingClose.insert(ObjectIdentifier(channel))
+                }
+                self.channels[ObjectIdentifier(channel)] = channel
+            }
         }
     }
     

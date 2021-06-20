@@ -18,12 +18,16 @@ class LiveSplitServerHandler: SimpleWebSocketServer {
 class LiveSplitServer {
     private let handler = LiveSplitServerHandler()
     private let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+    
+    var allowMultipleClients: Bool {
+        get { handler.allowMultipleClients }
+        set(value) { handler.allowMultipleClients = value}
+    }
     var connectedClients: Int {
         get { handler.connectedClients }
     }
 
     init(host: String, port: Int) throws {
-        
         let channel = try startWebSocketServer(host: host, port: port, group: group, handler: handler)
 
         guard let localAddress = channel.localAddress else {
