@@ -310,18 +310,18 @@ class RouteEvent {
     var event: String
 
     init?(from jsonString: String) {
-        if jsonString.prefix(1) == "#" {
-            return nil
-        }
         guard let match = RouteEvent.pattern.firstMatch(in: jsonString, options: [], range: NSRange(jsonString.startIndex..<jsonString.endIndex, in: jsonString)) else {
             return nil
         }
         silent = match.range(at: 1).location != NSNotFound
-        if let eventRange = Range(match.range(at: 2), in: jsonString) {
-            event = String(jsonString[eventRange]).lowercased(with: nil)
-        } else {
+        guard let eventRange = Range(match.range(at: 2), in: jsonString) else {
             return nil
         }
+        let event = String(jsonString[eventRange])
+        if event.isEmpty {
+            return nil
+        }
+        self.event = event
     }
     
     init(silent: Bool, event: String) {

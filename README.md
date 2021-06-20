@@ -60,7 +60,7 @@ Included are:
   - Any%
   - B-side
   - C-side
-- Icons (chapters, berry, and celeste mountain) for use as split icons
-For each of these the `.lss` file can be imported directly into LiveSplit One and the corresponding `.json` files can 
-be loaded into SwiftSplit. 
+
+## Authoring your own routes
+See [Authoring Routes](authoring_routes.md)
 
