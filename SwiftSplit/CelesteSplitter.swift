@@ -151,12 +151,12 @@ class CelesteSplitter {
         if new.chapterStarted && !old.chapterStarted && !new.chapterComplete {
             var event = Event(
                 .normal("enter chapter", specificity: 0),
-                .normal("enter chapter \(new.chapter)", specificity: 0)
+                .normal("enter chapter \(new.chapter)", specificity: 1)
             )
             switch new.mode {
-            case .Normal: event.add(variant: .normal("enter a-side \(new.chapter)", specificity: 0))
-            case .BSide: event.add(variant: .normal("enter b-side \(new.chapter)", specificity: 0))
-            case .CSide: event.add(variant: .normal("enter c-side \(new.chapter)", specificity: 0))
+            case .Normal: event.add(variant: .normal("enter a-side \(new.chapter)", specificity: 2))
+            case .BSide: event.add(variant: .normal("enter b-side \(new.chapter)", specificity: 2))
+            case .CSide: event.add(variant: .normal("enter c-side \(new.chapter)", specificity: 2))
             default: break
             }
             
@@ -175,12 +175,12 @@ class CelesteSplitter {
         if !new.chapterStarted && old.chapterStarted && !old.chapterComplete {
             var event: Event = Event(
                 .normal("leave chapter", specificity: 0),
-                .normal("leave chapter \(old.chapter)", specificity: 0)
+                .normal("leave chapter \(old.chapter)", specificity: 1)
             )
             switch new.mode {
-            case .Normal: event.add(variant: .normal("leave a-side \(old.chapter)", specificity: 0))
-            case .BSide: event.add(variant: .normal("leave b-side \(old.chapter)", specificity: 0))
-            case .CSide: event.add(variant: .normal("leave c-side \(old.chapter)", specificity: 0))
+            case .Normal: event.add(variant: .normal("leave a-side \(old.chapter)", specificity: 2))
+            case .BSide: event.add(variant: .normal("leave b-side \(old.chapter)", specificity: 2))
+            case .CSide: event.add(variant: .normal("leave c-side \(old.chapter)", specificity: 2))
             default: break
             }
             
@@ -196,12 +196,12 @@ class CelesteSplitter {
         if new.chapterComplete && !old.chapterComplete {
             var event: Event = Event(
                 .normal("complete chapter", specificity: 0),
-                .normal("complete chapter \(old.chapter)", specificity: 0)
+                .normal("complete chapter \(old.chapter)", specificity: 1)
             )
             switch new.mode {
-            case .Normal: event.add(variant: .normal("complete a-side \(old.chapter)", specificity: 0))
-            case .BSide: event.add(variant: .normal("complete b-side \(old.chapter)", specificity: 0))
-            case .CSide: event.add(variant: .normal("complete c-side \(old.chapter)", specificity: 0))
+            case .Normal: event.add(variant: .normal("complete a-side \(old.chapter)", specificity: 2))
+            case .BSide: event.add(variant: .normal("complete b-side \(old.chapter)", specificity: 2))
+            case .CSide: event.add(variant: .normal("complete c-side \(old.chapter)", specificity: 2))
             default: break
             }
             events.append(event)
@@ -213,8 +213,8 @@ class CelesteSplitter {
         if new.chapterCassette && !old.chapterCassette {
             events.append(Event(
                 .normal("collect cassette", specificity: 0),
-                .normal("collect chapter \(new.chapter) cassette", specificity: 0),
-                .normal("\(new.fileCassettes) total cassettes", specificity: 0),
+                .normal("collect chapter \(new.chapter) cassette", specificity: 1),
+                .normal("\(new.fileCassettes) total cassettes", specificity: 1),
                 // compat:
                 .legacy("cassette"),
                 .legacy("chapter \(new.chapter) cassette")
@@ -223,8 +223,8 @@ class CelesteSplitter {
         if new.chapterHeart && !old.chapterHeart {
             events.append(Event(
                 .normal("collect heart", specificity: 0),
-                .normal("collect chapter \(new.chapter) heart", specificity: 0),
-                .normal("\(new.fileHearts) total hearts", specificity: 0),
+                .normal("collect chapter \(new.chapter) heart", specificity: 1),
+                .normal("\(new.fileHearts) total hearts", specificity: 1),
                 // compat:
                 .legacy("heart"),
                 .legacy("chapter \(new.chapter) heart")
@@ -233,8 +233,8 @@ class CelesteSplitter {
         if new.chapterStrawberries > old.chapterStrawberries {
             events.append(Event(
                 .normal("collect strawberry", specificity: 0),
-                .normal("\(new.chapterStrawberries) chapter strawberries", specificity: 0),
-                .normal("\(new.fileStrawberries) file strawberries", specificity: 0),
+                .normal("\(new.chapterStrawberries) chapter strawberries", specificity: 1),
+                .normal("\(new.fileStrawberries) file strawberries", specificity: 1),
                 // compat:
                 .legacy("strawberry")
             ))

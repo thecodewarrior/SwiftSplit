@@ -32,7 +32,7 @@ class CelesteScanner {
     init(pid: pid_t) throws {
         self.pid = pid
         target = try MemscanTarget(pid: pid)
-        filter = MemscanFilter(startAddress: 0, endAddress: 0x0000700000000000)
+        filter = MemscanFilter(startAddress: 0, endAddress: 0x0000800000000000)
     }
     
     func findHeader() throws {
