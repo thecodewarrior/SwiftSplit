@@ -205,20 +205,29 @@ class ViewController: NSViewController, RouteBoxDelegate {
                 Cassettes: \(info.fileCassettes)
                 Hearts: \(info.fileHearts)
             """
-            let extended = try? self.splitter?.scanner.readExtended()
-            if let extended = extended {
-                var address = "none"
-                if let p = self.splitter?.scanner.extendedInfo?.address {
-                    address = String(format: "%llx", p)
+            do {
+                let extended = try self.splitter?.scanner.readExtended()
+                if let extended = extended {
+                    var address = "none"
+                    if let p = self.splitter?.scanner.extendedInfo?.address {
+                        address = String(format: "%llx", p)
+                    }
+                    dataText += """
+                    
+                    Extended:
+                        Address: \(address)
+                        Madeline X: \(extended.madelineX)
+                        Madeline Y: \(extended.madelineY)
+                        File Deaths: \(extended.fileDeaths)
+                        Level Deaths: \(extended.levelDeaths)
+                        Area Name: \(extended.areaName)
+                        Area SID: \(extended.areaSID)
+                        Level Set: \(extended.levelSet)
+                    """
+                    
                 }
-                dataText += """
-                
-                Extended:
-                    Address: \(address)
-                    Madeline X: \(extended.madelineX)
-                    Madeline Y: \(extended.madelineY)
-                """
-
+            } catch {
+                print(error)
             }
             celesteDataLabel.stringValue = dataText
         } else {

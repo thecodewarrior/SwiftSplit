@@ -40,10 +40,12 @@ class CelesteScanner {
         print("Scanning for the AutoSplitterData object header")
 
         extendedInfo = try process.findPointer(by: "11efbeadde11")
+        if let info = extendedInfo {
+            try Mono.debugMemory(around: info, before: 64, after: 64)
+        }
 
         if CelesteScanner.canImmediatelyConnect(pid: pid) {
             headerInfo = CelesteScanner.lastHeader
-            try? debugPointers()
             return
         }
 
@@ -58,12 +60,10 @@ class CelesteScanner {
     }
 
     func readExtended() throws -> ExtendedAutoSplitterData? {
-//        if guard let extendedInfo = extendedInfo else {
-//            return nil
-//        }
-//        let buf = try target.read(at: extendedPointer, count: )
-//        return ExtendedAutoSplitterData(from: extendedInfo)
-        return nil
+        guard let extendedInfo = extendedInfo else {
+            return nil
+        }
+        return try ExtendedAutoSplitterData(from: extendedInfo)
     }
 
     func getInfo() throws -> AutoSplitterInfo? {
@@ -73,50 +73,6 @@ class CelesteScanner {
         }
         guard let info = autoSplitterInfo else { return nil }
         return try AutoSplitterInfo(from: try AutoSplitterData(from: info))
-    }
-
-    /**
-     Run a scan for the level strings, printing the memory of every match. Useful for figuring out the memory layout
-     */
-    func debugPointers() throws {
-
-//        print("Running a pointer debug")
-//        guard let signature = headerSignature else {
-//            print("  There is no header signature. Please open the AUTOSPLIT save and scan for the header.")
-//            pointer = 0
-//            return
-//        }
-//
-//        let scanner = MemscanScanner(target: target, signature: signature, filter: filter)
-//        while let match = try scanner.next() {
-//            print(String(format: "Object @ %016llx", match.address))
-//
-//            let vTable_ptr = try readPointer(from: match.address, offset: 0)
-//            print(String(format: "VTable @ %016llx", vTable_ptr))
-//
-////            try debugMemoryAround(vTable_ptr, before: 0, after: 64)
-//
-//            let monoClass_ptr = try readPointer(from: vTable_ptr, offset: 0)
-//            print(String(format: "MonoClass @ %016llx", monoClass_ptr))
-//
-////            try debugMemoryAround(monoClass_ptr, before: 0, after: 64)
-//
-//            let name_ptr = try readPointer(from: monoClass_ptr, offset: 8)
-//            print(String(format: "MonoClass.name @ %016llx", name_ptr))
-//            try debugMemoryAround(name_ptr, before: 0, after: 128)
-//
-//        }
-    }
-
-    func readPointer(from address: vm_address_t, offset: vm_offset_t) throws -> vm_address_t {
-        let data = try target.read(at: address + offset, count: 8)
-        return data.buffer.bindMemory(to: vm_address_t.self)[0]
-    }
-
-    func debugMemoryAround(_ address: vm_address_t, before: vm_offset_t, after: vm_offset_t) throws {
-        let data = try target.read(at: address - before, count: before + after)
-        print("    Forward: \(data.debugString(withCursor: Int(before)))")
-        print("    Reversed: \(data.debugStringReversed(withCursor: Int(before)))")
     }
 
     static var lastHeader: HeaderInfo? {
@@ -188,9 +144,6 @@ struct HeaderInfo: Codable {
  ```
  */
 struct AutoSplitterData {
-    var header: UInt64
-    var monoSync: UInt64
-
     var chapter: Int32
     var mode: Int32
     var level: RmaPointer
@@ -207,23 +160,21 @@ struct AutoSplitterData {
     var fileHearts: Int32
 
     init(from pointer: RmaPointer) throws {
-        let preload = try pointer.preload(size: 80)
-        header = preload.value(at: 0)
-        monoSync = preload.value(at: 8)
-        level = preload.value(at: 16)
-        chapter = preload.value(at: 24)
-        mode = preload.value(at: 28)
-        timerActive = preload.value(at: 32)
-        chapterStarted = preload.value(at: 33)
-        chapterComplete = preload.value(at: 34)
-        chapterTime = preload.value(at: 40)
-        chapterStrawberries = preload.value(at: 48)
-        chapterCassette = preload.value(at: 52)
-        chapterHeart = preload.value(at: 53)
-        fileTime = preload.value(at: 56)
-        fileStrawberries = preload.value(at: 64)
-        fileCassettes = preload.value(at: 68)
-        fileHearts = preload.value(at: 72)
+        let body = try pointer.offset(by: Mono.HEADER_BYTES).preload(size: 60)
+        level = body.value(at: 0)
+        chapter = body.value(at: 8)
+        mode = body.value(at: 12)
+        timerActive = body.value(at: 16)
+        chapterStarted = body.value(at: 17)
+        chapterComplete = body.value(at: 18)
+        chapterTime = body.value(at: 24)
+        chapterStrawberries = body.value(at: 32)
+        chapterCassette = body.value(at: 36)
+        chapterHeart = body.value(at: 37)
+        fileTime = body.value(at: 40)
+        fileStrawberries = body.value(at: 48)
+        fileCassettes = body.value(at: 52)
+        fileHearts = body.value(at: 56)
     }
 }
 
@@ -285,7 +236,7 @@ class AutoSplitterInfo {
         default:
             self.mode = .Other(value: Int(data.mode))
         }
-        self.level = try Mono.readString(at: data.level)
+        self.level = try Mono.readString(at: data.level) ?? ""
         self.timerActive = data.timerActive != 0
         self.chapterStarted = data.chapterStarted != 0
         self.chapterComplete = data.chapterComplete != 0
@@ -301,14 +252,26 @@ class AutoSplitterInfo {
 }
 
 struct ExtendedAutoSplitterData {
-    var madelineX: Float = 0.0
-    var madelineY: Float = 0.0
-
-    init() {}
+    var madelineX: Float
+    var madelineY: Float
+    var fileDeaths: Int32
+    var levelDeaths: Int32
+    var areaName: String
+    var areaSID: String
+    var levelSet: String
+    var completeScreenName: String
 
     init(from pointer: RmaPointer) throws {
-        madelineX = try pointer.value(at: 0)
-        madelineY = try pointer.value(at: 4)
+        // offset to skip the `11deadbeef11`
+        let body = try pointer.offset(by: 8).preload(size: 48)
+        madelineX = body.value(at: 0)
+        madelineY = body.value(at: 4)
+        fileDeaths = body.value(at: 8)
+        levelDeaths = body.value(at: 12)
+        areaName = try Mono.readString(at: body.value(at: 16)) ?? ""
+        areaSID = try Mono.readString(at: body.value(at: 24)) ?? ""
+        levelSet = try Mono.readString(at: body.value(at: 32)) ?? ""
+        completeScreenName = try Mono.readString(at: body.value(at: 40)) ?? ""
     }
 }
 

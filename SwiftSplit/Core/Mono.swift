@@ -11,6 +11,8 @@ import Foundation
 final class Mono {
     private init() {}
     
+    static let HEADER_BYTES: Int = 16
+    
     /**
      Parse a C# string object
      
@@ -24,9 +26,19 @@ final class Mono {
      0                8                16       20
      ```
      */
-    static func readString(at pointer: RmaPointer) throws -> String {
+    static func readString(at pointer: RmaPointer) throws -> String? {
+        if pointer.address == 0 {
+            return nil
+        }
         let length: Int32 = try pointer.value(at: 16)
         let stringData = try pointer.raw(at: 20, count: vm_offset_t(length) * 2)
         return String(utf16CodeUnits: stringData.buffer.bindMemory(to: unichar.self).baseAddress!, count: Int(length))
     }
+    
+    static func debugMemory(around pointer: RmaPointer, before: vm_offset_t, after: vm_offset_t) throws {
+        let data = try pointer.raw(at: -Int(before), count: before + after)
+        print("    Forward: \(data.debugString(withCursor: Int(before)))")
+        print("    Reversed: \(data.debugStringReversed(withCursor: Int(before)))")
+    }
+
 }
