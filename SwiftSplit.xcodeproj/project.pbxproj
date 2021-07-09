@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD2A0F532697E10100863275 /* RemoteMemoryAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2A0F522697E10100863275 /* RemoteMemoryAccess.swift */; };
 		CD5E946B267A52B900CFAB31 /* EventStreamItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5E9469267A52B900CFAB31 /* EventStreamItem.swift */; };
 		CD5E946C267A52B900CFAB31 /* EventStreamItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD5E946A267A52B900CFAB31 /* EventStreamItem.xib */; };
 		CD5E946E267A5ED300CFAB31 /* EventListDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5E946D267A5ED300CFAB31 /* EventListDelegate.swift */; };
@@ -21,11 +22,13 @@
 		CD7CDC05256F7304002AE46F /* SimpleWebSocketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDC04256F7304002AE46F /* SimpleWebSocketServer.swift */; };
 		CD7CDC2825717D2D002AE46F /* CelesteSplitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CDC2725717D2D002AE46F /* CelesteSplitter.swift */; };
 		CDA94457257382D300DB2A85 /* RouteBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA94456257382D300DB2A85 /* RouteBox.swift */; };
+		CDC82AB926981C4E007436BD /* Mono.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC82AB826981C4E007436BD /* Mono.swift */; };
 		DB56D9F05D0BC5B4DE4CECC8 /* Pods_SwiftSplit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF09341B2ECF29501B823DEC /* Pods_SwiftSplit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2557401E37458142957F7D9D /* Pods-SwiftSplit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSplit.debug.xcconfig"; path = "Target Support Files/Pods-SwiftSplit/Pods-SwiftSplit.debug.xcconfig"; sourceTree = "<group>"; };
+		CD2A0F522697E10100863275 /* RemoteMemoryAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMemoryAccess.swift; sourceTree = "<group>"; };
 		CD5E9469267A52B900CFAB31 /* EventStreamItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStreamItem.swift; sourceTree = "<group>"; };
 		CD5E946A267A52B900CFAB31 /* EventStreamItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventStreamItem.xib; sourceTree = "<group>"; };
 		CD5E946D267A5ED300CFAB31 /* EventListDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListDelegate.swift; sourceTree = "<group>"; };
@@ -46,6 +49,7 @@
 		CD7CDC04256F7304002AE46F /* SimpleWebSocketServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleWebSocketServer.swift; sourceTree = "<group>"; };
 		CD7CDC2725717D2D002AE46F /* CelesteSplitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelesteSplitter.swift; sourceTree = "<group>"; };
 		CDA94456257382D300DB2A85 /* RouteBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBox.swift; sourceTree = "<group>"; };
+		CDC82AB826981C4E007436BD /* Mono.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mono.swift; sourceTree = "<group>"; };
 		CF09341B2ECF29501B823DEC /* Pods_SwiftSplit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftSplit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1C15A185F4552F09EFE4D9D /* Pods-SwiftSplit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSplit.release.xcconfig"; path = "Target Support Files/Pods-SwiftSplit/Pods-SwiftSplit.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -105,6 +109,7 @@
 				CD7CDBE6256F5D0D002AE46F /* ViewController.swift */,
 				CD5E946D267A5ED300CFAB31 /* EventListDelegate.swift */,
 				CD7CDC2725717D2D002AE46F /* CelesteSplitter.swift */,
+				CD7CDBF9256F5DFC002AE46F /* CelesteScanner.swift */,
 				CD5E9469267A52B900CFAB31 /* EventStreamItem.swift */,
 				CD5E946A267A52B900CFAB31 /* EventStreamItem.xib */,
 				CD7CDBE8256F5D0F002AE46F /* Assets.xcassets */,
@@ -114,7 +119,6 @@
 				CD7CDBEE256F5D0F002AE46F /* SwiftSplit.entitlements */,
 				CD7CDBF4256F5DDB002AE46F /* SwiftSplit-Bridging-Header.h */,
 				CD7CDBFC256F5DFC002AE46F /* CelesteMemoryLayout.md */,
-				CD7CDBF9256F5DFC002AE46F /* CelesteScanner.swift */,
 			);
 			path = SwiftSplit;
 			sourceTree = "<group>";
@@ -125,6 +129,8 @@
 				CD7CDBFD256F5DFC002AE46F /* memory_scanner.c */,
 				CD7CDBFA256F5DFC002AE46F /* memory_scanner.h */,
 				CD7CDBF8256F5DFC002AE46F /* MemoryScanner.swift */,
+				CD2A0F522697E10100863275 /* RemoteMemoryAccess.swift */,
+				CDC82AB826981C4E007436BD /* Mono.swift */,
 				CD7CDC02256F626D002AE46F /* LiveSplitServer.swift */,
 				CD7CDC04256F7304002AE46F /* SimpleWebSocketServer.swift */,
 			);
@@ -249,11 +255,13 @@
 			files = (
 				CD7CDC03256F626D002AE46F /* LiveSplitServer.swift in Sources */,
 				CD7CDBFE256F5DFC002AE46F /* MemoryScanner.swift in Sources */,
+				CDC82AB926981C4E007436BD /* Mono.swift in Sources */,
 				CD7CDC00256F5DFC002AE46F /* memory_scanner.c in Sources */,
 				CD7CDBE7256F5D0D002AE46F /* ViewController.swift in Sources */,
 				CD5E946E267A5ED300CFAB31 /* EventListDelegate.swift in Sources */,
 				CDA94457257382D300DB2A85 /* RouteBox.swift in Sources */,
 				CD7CDBFF256F5DFC002AE46F /* CelesteScanner.swift in Sources */,
+				CD2A0F532697E10100863275 /* RemoteMemoryAccess.swift in Sources */,
 				CD7CDC05256F7304002AE46F /* SimpleWebSocketServer.swift in Sources */,
 				CD5E946B267A52B900CFAB31 /* EventStreamItem.swift in Sources */,
 				CD7CDBE5256F5D0D002AE46F /* AppDelegate.swift in Sources */,

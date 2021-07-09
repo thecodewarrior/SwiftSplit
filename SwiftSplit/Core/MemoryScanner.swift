@@ -15,7 +15,7 @@ enum MemscanError : Error {
     case readNullPointer
 }
 
-class MemscanSignature {
+final class MemscanSignature {
     var native: memscan_signature
 
     /**
@@ -75,7 +75,7 @@ class MemscanSignature {
     }
 }
 
-class MemscanTarget {
+final class MemscanTarget {
     let native: memscan_target
     
     init(pid: pid_t) throws {
@@ -100,7 +100,7 @@ class MemscanTarget {
     }
 }
 
-class MemscanReadResult {
+final class MemscanReadResult {
     let buffer: UnsafeRawBufferPointer
     
     init(with buffer: UnsafeRawBufferPointer) {
@@ -139,7 +139,7 @@ class MemscanReadResult {
 
 }
 
-class MemscanFilter {
+final class MemscanFilter {
     let native: memscan_filter
     
     init(startAddress: vm_address_t, endAddress: vm_address_t) {
@@ -150,7 +150,7 @@ class MemscanFilter {
     }
 }
 
-class MemscanScanner {
+final class MemscanScanner {
     let native: OpaquePointer
     private var nativeSignature: UnsafePointer<memscan_signature>
     
@@ -180,12 +180,24 @@ class MemscanScanner {
     }
 }
 
-class MemscanMatch {
+final class MemscanMatch {
     let native: memscan_match
     
     var address: vm_address_t {
         get {
             return native.address
+        }
+    }
+    
+    var searchedBytes: Int {
+        get {
+            return native.searched_bytes
+        }
+    }
+    
+    var retriedBytes: Int {
+        get {
+            return native.retried_bytes
         }
     }
 

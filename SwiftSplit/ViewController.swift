@@ -186,14 +186,10 @@ class ViewController: NSViewController, RouteBoxDelegate {
         
         let info = splitter.autoSplitterInfo
         if showCelesteData {
-            celesteDataLabel.stringValue = """
-            Object Header: \(String(format: "%08llx", info.data.header))
-            Object Location: \(String(format: "%08llx", info.data.location))
-            
+            var dataText = """
             Chapter: \(info.chapter)
             Mode: \(info.mode)
             Level:
-                Name Pointer: \(String(format: "%llx", info.data.levelPointer))
                 Name: \(info.level)
                 Timer Active: \(info.timerActive)
             Chapter:
@@ -209,6 +205,22 @@ class ViewController: NSViewController, RouteBoxDelegate {
                 Cassettes: \(info.fileCassettes)
                 Hearts: \(info.fileHearts)
             """
+            let extended = try? self.splitter?.scanner.readExtended()
+            if let extended = extended {
+                var address = "none"
+                if let p = self.splitter?.scanner.extendedInfo?.address {
+                    address = String(format: "%llx", p)
+                }
+                dataText += """
+                
+                Extended:
+                    Address: \(address)
+                    Madeline X: \(extended.madelineX)
+                    Madeline Y: \(extended.madelineY)
+                """
+
+            }
+            celesteDataLabel.stringValue = dataText
         } else {
             celesteDataLabel.stringValue = "…"
         }

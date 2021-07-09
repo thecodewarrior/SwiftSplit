@@ -125,6 +125,9 @@ struct memscan_scanner_t {
      The address of the current search. If this is negative, it's addressing into the previous_page_buffer (-1 is the last, -2 the one before that, etc.)
      */
     int scan_index;
+    
+    size_t searched_bytes;
+    size_t retried_bytes;
 };
 
 void memscan_scanner_free(memscan_scanner *scanner) {
@@ -288,18 +291,23 @@ bool memscan_scanner_next(memscan_scanner *scanner, memscan_match *match, memsca
             // the match failed. Roll back to right after this match attempt started.
             // If this match failed on the first character has the effect of incrementing
             if(match_progress > 0) {
+                scanner->retried_bytes += match_progress;
                 scanner->scan_index -= match_progress; // first roll back to exactly where it started
             }
+            scanner->searched_bytes++;
             scanner->scan_index++; // then step forward by one
             match_progress = 0;
         } else {
             // the match is progressing
             match_progress++;
+            scanner->searched_bytes++;
             scanner->scan_index++;
             
             if(match_progress == scanner->signature->length) {
                 *match = (memscan_match){
-                    .address = scanner->page_address + scanner->scan_index - match_progress
+                    .address = scanner->page_address + scanner->scan_index - match_progress,
+                    .searched_bytes = scanner->searched_bytes,
+                    .retried_bytes = scanner->retried_bytes
                 };
                 return true;
             }

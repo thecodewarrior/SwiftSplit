@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <mach/mach.h>
+#include <sys/types.h>
 
 typedef struct memscan_target_t {
     pid_t pid;
@@ -80,6 +81,8 @@ typedef struct memscan_match_t {
      The address of the match. This points to the start of the signature.
      */
     vm_address_t address;
+    size_t searched_bytes;
+    size_t retried_bytes;
 } memscan_match;
 
 /**
