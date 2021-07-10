@@ -107,7 +107,7 @@ class ViewController: NSViewController, RouteBoxDelegate {
         }
 
         var connectionAttempts = 0
-        self.connectionStatusLabel.stringValue = "Connecting…"
+        self.connectionStatusLabel.stringValue = "Waiting…"
         if CelesteScanner.canImmediatelyConnect(pid: pid) {
             self.connect(pid: pid)
             return
@@ -117,6 +117,7 @@ class ViewController: NSViewController, RouteBoxDelegate {
                 self.connectTimer?.invalidate()
                 self.connectTimer = nil
                 self.connectionStatusLabel.stringValue = "Not connected"
+                return
             }
             
             self.connect(pid: pid)
@@ -149,7 +150,9 @@ class ViewController: NSViewController, RouteBoxDelegate {
     }
     
     func connect(pid: pid_t) {
+        self.connectionStatusLabel.stringValue = "Connecting…"
         guard let server = self.server else {
+            self.connectionStatusLabel.stringValue = "Failed to start split server"
             return
         }
         
@@ -205,29 +208,21 @@ class ViewController: NSViewController, RouteBoxDelegate {
                 Cassettes: \(info.fileCassettes)
                 Hearts: \(info.fileHearts)
             """
-            do {
-                let extended = try self.splitter?.scanner.readExtended()
-                if let extended = extended {
-                    var address = "none"
-                    if let p = self.splitter?.scanner.extendedInfo?.address {
-                        address = String(format: "%llx", p)
-                    }
-                    dataText += """
-                    
-                    Extended:
-                        Address: \(address)
-                        Madeline X: \(extended.madelineX)
-                        Madeline Y: \(extended.madelineY)
-                        File Deaths: \(extended.fileDeaths)
-                        Level Deaths: \(extended.levelDeaths)
-                        Area Name: \(extended.areaName)
-                        Area SID: \(extended.areaSID)
-                        Level Set: \(extended.levelSet)
-                    """
-                    
+            if let extended = splitter.extendedInfo {
+                var address = "none"
+                if let p = self.splitter?.scanner.extendedInfo?.address {
+                    address = String(format: "%llx", p)
                 }
-            } catch {
-                print(error)
+                dataText += """
+                
+                Extended:
+                    Address: \(address)
+                    Chapter Deaths: \(extended.chapterDeaths)
+                    Level Deaths: \(extended.levelDeaths)
+                    Area Name: \(extended.areaName)
+                    Area SID: \(extended.areaSID)
+                    Level Set: \(extended.levelSet)
+                """
             }
             celesteDataLabel.stringValue = dataText
         } else {

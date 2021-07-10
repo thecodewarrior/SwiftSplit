@@ -39,7 +39,7 @@ class CelesteScanner {
     func findHeader() throws {
         print("Scanning for the AutoSplitterData object header")
 
-        extendedInfo = try process.findPointer(by: "11efbeadde11")
+        extendedInfo = try process.findPointer(by: "1100efbeadde0011")
         if let info = extendedInfo {
             try Mono.debugMemory(around: info, before: 64, after: 64)
         }
@@ -59,11 +59,11 @@ class CelesteScanner {
 
     }
 
-    func readExtended() throws -> ExtendedAutoSplitterData? {
+    func getExtendedInfo() throws -> ExtendedAutoSplitterInfo? {
         guard let extendedInfo = extendedInfo else {
             return nil
         }
-        return try ExtendedAutoSplitterData(from: extendedInfo)
+        return try ExtendedAutoSplitterInfo(from: extendedInfo)
     }
 
     func getInfo() throws -> AutoSplitterInfo? {
@@ -251,27 +251,21 @@ class AutoSplitterInfo {
     }
 }
 
-struct ExtendedAutoSplitterData {
-    var madelineX: Float
-    var madelineY: Float
-    var fileDeaths: Int32
+struct ExtendedAutoSplitterInfo {
+    var chapterDeaths: Int32
     var levelDeaths: Int32
     var areaName: String
     var areaSID: String
     var levelSet: String
-    var completeScreenName: String
 
     init(from pointer: RmaPointer) throws {
-        // offset to skip the `11deadbeef11`
-        let body = try pointer.offset(by: 8).preload(size: 48)
-        madelineX = body.value(at: 0)
-        madelineY = body.value(at: 4)
-        fileDeaths = body.value(at: 8)
-        levelDeaths = body.value(at: 12)
-        areaName = try Mono.readString(at: body.value(at: 16)) ?? ""
-        areaSID = try Mono.readString(at: body.value(at: 24)) ?? ""
-        levelSet = try Mono.readString(at: body.value(at: 32)) ?? ""
-        completeScreenName = try Mono.readString(at: body.value(at: 40)) ?? ""
+        // offset to skip the `1100deadbeef0011`
+        let body = try pointer.offset(by: 8).preload(size: 40)
+        chapterDeaths = body.value(at: 0)
+        levelDeaths = body.value(at: 4)
+        areaName = try Mono.readString(at: body.value(at: 8)) ?? ""
+        areaSID = try Mono.readString(at: body.value(at: 16)) ?? ""
+        levelSet = try Mono.readString(at: body.value(at: 24)) ?? ""
     }
 }
 

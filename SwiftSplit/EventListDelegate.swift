@@ -26,9 +26,7 @@ class EventListDelegate: NSObject, NSCollectionViewDelegate, NSCollectionViewDat
             return
         }
         
-        let variants = events.flatMap { event in
-            event.variants.sorted(by: { $0.type.sortOrder < $1.type.sortOrder })
-        }.filter { $0.type != VariantType.legacy }
+        let variants = events.flatMap { $0.variants }.filter { $0.type != VariantType.legacy }
         let entries = variants.map { $0.event }
         
         let removeCount = eventEntries.count + entries.count - maxEntries
