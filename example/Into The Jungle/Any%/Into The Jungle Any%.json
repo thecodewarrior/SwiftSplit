@@ -1,0 +1,39 @@
+{
+    "useFileTime": true,
+    "reset": "leave chapter",
+    "route": [
+        "enter chapter 12 ## Prologue",
+        "complete chapter",
+
+        "!enter chapter 13 ## Verdant Trail",
+        "!a_11 > b_01 ## Undergrowth",
+        "!b_12 > c_01 ## Canopy",
+        "!c_12 > d_01 ## Emergent",
+        "complete chapter",
+
+        "!enter chapter 14 ## Spoopy Thicket",
+        "!a_13 > b_01 ## The Veil",
+        "!b_15 > c_00 ## Skittering",
+        "!c_12 > d_01 ## The Nest",
+        "complete chapter",
+
+        "!enter chapter 15 ## Ancient Ruins",
+        "!a_15 > b_01 ## Skyward",
+        "!b_14 > c_01 ## Elevation",
+        "!c_13 > d_01 ## Remnants",
+        "complete chapter",
+
+        "!enter chapter 16 ## Shifting Temple",
+        "!a_14 > b_01 ## Tunnels",
+        "!b_12 > c_01 ## Labyrinth",
+        "!c_13 > d_01 ## Collapse",
+        "complete chapter",
+
+        "!enter chapter 16 ## The Depths",
+        "!a_01 > b_01 ## Reclamation",
+        "!b_12 > c_01 ## Vision",
+        "!c_13 > d_01 ## Finale",
+        "complete chapter"
+    ]
+}
+

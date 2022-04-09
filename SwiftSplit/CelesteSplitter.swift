@@ -74,6 +74,7 @@ class CelesteSplitter {
     private var time: Double = 0.0
     private var gameTimeRunning = false
     private(set) var nextEventIndex = 0
+    private var feedIndex = 0
     
     func reset() {
         server.reset()
@@ -86,7 +87,10 @@ class CelesteSplitter {
             return []
         }
         let extended = try scanner.getExtendedInfo()
-        let events = getEvents(from: autoSplitterInfo, extended: extendedInfo, to: info, extended: extended)
+        
+        var externalFeed: [String] = try readExternalFeed(from: extended)
+        
+        let events = getEvents(from: autoSplitterInfo, extended: extendedInfo, to: info, extended: extended, feed: externalFeed)
         logStateChange(from: autoSplitterInfo, extended: extendedInfo, to: info, extended: extendedInfo)
         autoSplitterInfo = info
         extendedInfo = extended
@@ -144,7 +148,29 @@ class CelesteSplitter {
         }
     }
     
-    func getEvents(from old: AutoSplitterInfo, extended oldExtended: ExtendedAutoSplitterInfo?, to new: AutoSplitterInfo, extended newExtended: ExtendedAutoSplitterInfo?) -> [Event] {
+    func readExternalFeed(from extended: ExtendedAutoSplitterInfo?) throws -> [String] {
+        guard let info = extended else { return [] }
+        
+        let remoteIndex = Int(info.feedIndex)
+        if self.extendedInfo == nil {
+            self.feedIndex = remoteIndex
+        }
+        let remoteFeed = info.feed
+        
+        var items: [String] = []
+        
+        self.feedIndex = max(remoteIndex - remoteFeed.count, self.feedIndex)
+        while self.feedIndex < remoteIndex {
+            if let feedItem = try Mono.readString(at: remoteFeed[self.feedIndex % remoteFeed.count]) {
+                items.append(feedItem)
+            }
+            self.feedIndex += 1
+        }
+        
+        return items
+    }
+    
+    func getEvents(from old: AutoSplitterInfo, extended oldExtended: ExtendedAutoSplitterInfo?, to new: AutoSplitterInfo, extended newExtended: ExtendedAutoSplitterInfo?, feed externalFeed: [String]) -> [Event] {
         var events: [Event] = []
         
         // if we don't check `new.chapterComplete`, the summit credits trigger the autosplitter
@@ -322,6 +348,14 @@ class CelesteSplitter {
             event.add("\(new.fileStrawberries) file strawberries")
             event.add(variant: .legacy("strawberry"))
 
+            events.append(event)
+        }
+        
+        if !externalFeed.isEmpty {
+            var event = Event()
+            for item in externalFeed {
+                event.add(item)
+            }
             events.append(event)
         }
         return events

@@ -1,0 +1,12 @@
+{
+    "useFileTime": false,
+    "reset": "leave chapter",
+    "route": [
+        "enter chapter 16 ## Start",
+        "a_14 > b_01 ## Tunnels",
+        "b_12 > c_01 ## Labyrinth",
+        "c_13 > d_01 ## Collapse",
+        "complete chapter"
+    ]
+}
+

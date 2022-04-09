@@ -68,6 +68,7 @@ class CelesteScanner {
 
     func getInfo() throws -> AutoSplitterInfo? {
         guard let header = self.headerInfo else { return nil }
+        
         if try autoSplitterInfo?.read(bytes: 16) != header.signatureData {
             autoSplitterInfo = try process.findPointer(by: MemscanSignature(from: header.signatureData))
         }
@@ -257,15 +258,24 @@ struct ExtendedAutoSplitterInfo {
     var areaName: String
     var areaSID: String
     var levelSet: String
+    var feedIndex: Int32
+    var feed: [RmaPointer]
 
     init(from pointer: RmaPointer) throws {
-        // offset to skip the `1100deadbeef0011`
-        let body = try pointer.offset(by: 8).preload(size: 40)
-        chapterDeaths = body.value(at: 0)
-        levelDeaths = body.value(at: 4)
-        areaName = try Mono.readString(at: body.value(at: 8)) ?? ""
-        areaSID = try Mono.readString(at: body.value(at: 16)) ?? ""
-        levelSet = try Mono.readString(at: body.value(at: 24)) ?? ""
+        let body = try pointer.preload(size: ExtendedAutoSplitterInfo.FIELD_COUNT * 8)
+        
+        // body.value(at: 0 * 8) // ignore marker at index 0
+        chapterDeaths = body.value(at: 1 * 8)
+        levelDeaths = body.value(at: 2 * 8)
+        areaName = try Mono.readString(at: body.value(at: 3 * 8)) ?? ""
+        areaSID = try Mono.readString(at: body.value(at: 4 * 8)) ?? ""
+        levelSet = try Mono.readString(at: body.value(at: 5 * 8)) ?? ""
+        feedIndex = body.value(at: 6 * 8)
+        feed = try Mono.readArray(at: body.value(at: 7 * 8)) ?? []
     }
+    
+    // for ease of access the C# mod puts each field in its own 8-byte word
+    // (this count includes the marker
+    static let FIELD_COUNT: UInt = 8
 }
 

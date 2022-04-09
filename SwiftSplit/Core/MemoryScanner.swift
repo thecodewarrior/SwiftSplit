@@ -10,9 +10,26 @@ import Foundation
 
 enum MemscanError : Error {
     case errorGettingTask(machError: String)
-    case scanError(result: memscan_error, machError: String)
-    case readError(result: memscan_error, machError: String)
+    case scanError(memscanError: String, machError: String)
+    case readError(memscanError: String, machError: String)
     case readNullPointer
+    
+    static func memscanErrorString(_ error: memscan_error) -> String {
+        switch error.memscan {
+        case MEMSCAN_SUCCESS:
+            return "MEMSCAN_SUCCESS"
+        case MEMSCAN_ERROR_PAGE_SIZE_FAILED:
+            return "MEMSCAN_ERROR_PAGE_SIZE_FAILED"
+        case MEMSCAN_ERROR_VM_REGION_INFO_FAILED:
+            return "MEMSCAN_ERROR_VM_REGION_INFO_FAILED"
+        case MEMSCAN_ERROR_VM_READ_MEMORY_FAILED:
+            return "MEMSCAN_ERROR_VM_READ_MEMORY_FAILED"
+        case MEMSCAN_ERROR_VM_WRITE_MEMORY_FAILED:
+            return "MEMSCAN_ERROR_VM_WRITE_MEMORY_FAILED"
+        default:
+            return "\(error.memscan)"
+        }
+    }
 }
 
 final class MemscanSignature {
@@ -91,7 +108,7 @@ final class MemscanTarget {
         var error: memscan_error = memscan_error()
         let data = memscan_read(native, pointer, count, &error)
         if(error.memscan != MEMSCAN_SUCCESS) {
-            throw MemscanError.readError(result: error, machError: String(cString: mach_error_string(error.mach)))
+            throw MemscanError.readError(memscanError: MemscanError.memscanErrorString(error), machError: String(cString: mach_error_string(error.mach)))
         }
         guard data != nil else {
             throw MemscanError.readNullPointer
@@ -168,7 +185,7 @@ final class MemscanScanner {
             return MemscanMatch(native: match)
         }
         if(error.memscan != MEMSCAN_SUCCESS) {
-            throw MemscanError.scanError(result: error, machError: String(cString: mach_error_string(error.mach)))
+            throw MemscanError.scanError(memscanError: MemscanError.memscanErrorString(error), machError: String(cString: mach_error_string(error.mach)))
         }
         return nil
     }

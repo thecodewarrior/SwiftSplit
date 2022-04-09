@@ -1,0 +1,12 @@
+{
+    "useFileTime": false,
+    "reset": "leave chapter",
+    "route": [
+        "enter chapter 14 ## Start",
+        "a_13 > b_01 ## The Veil",
+        "b_15 > c_00 ## Skittering",
+        "c_12 > d_01 ## The Nest",
+        "complete chapter"
+    ]
+}
+

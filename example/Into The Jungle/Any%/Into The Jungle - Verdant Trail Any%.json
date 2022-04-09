@@ -1,0 +1,12 @@
+{
+    "useFileTime": false,
+    "reset": "leave chapter",
+    "route": [
+        "enter chapter 13 ## Start",
+        "a_11 > b_01 ## Undergrowth",
+        "b_12 > c_01 ## Canopy",
+        "c_12 > d_01 ## Emergent",
+        "complete chapter"
+    ]
+}
+

@@ -43,7 +43,7 @@ class RmaProcess {
 }
 
 struct RmaPointer {
-    private let target: MemscanTarget
+    let target: MemscanTarget
     let address: vm_address_t
     
     init(_ target: MemscanTarget, at address: vm_address_t) {

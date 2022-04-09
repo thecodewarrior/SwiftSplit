@@ -1,0 +1,12 @@
+{
+    "useFileTime": false,
+    "reset": "leave chapter",
+    "route": [
+        "enter chapter 15 ## Start",
+        "a_15 > b_01 ## Skyward",
+        "b_14 > c_01 ## Elevation",
+        "c_13 > d_01 ## Remnants",
+        "complete chapter"
+    ]
+}
+
