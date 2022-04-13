@@ -5,7 +5,7 @@ Here's an example for Old Site Any%:
 ```json
 {
     "useFileTime": false,
-    "reset": "reset chapter",
+    "reset": "leave chapter",
     "route": [
         "enter chapter 2 ## Start",
         "d8 > d3 ## - Mirror",
@@ -87,12 +87,14 @@ Leave events are triggered by restarting the chapter, returning to the map, or u
   - `<n> chapter strawberries` - Triggered when a total of `<n>` strawberries are collected in a chapter
   - `<n> file strawberries` - Triggered when a total of `<n>` strawberries are collected in the file
 
-## Extended Events (Everest)
-Everest supplies additional split data
+## 
+The [`ExtendedSplits.zip`](./ExtendedSplits.zip) file included in this repository is an Everest mod that exposes 
+additional data to SwiftSplit, in particular it provides SwiftSplit with the full area SID
 
-### SID Events
-Chapter numbers for custom maps are dynamically allocated by Everest, so when the Everest autosplitter data is present,
-SwiftSplit emits variants of all the relevant events using the Area SID
+## Extended Events (Everest)
+Chapter numbers for custom maps are dynamically allocated by Everest, so if you want area-specific events 
+(`enter chapter 1` vs. `enter chapter`) you can add the [ExtendedSplits](./ExtendedSplits.zip) mod, which SwiftSplit 
+will use to emit variants of all the relevant events using the Area SID instead of area number. 
 
 - `enter chapter '<sid>'` - Triggered when the given chapter is entered
 - `leave chapter '<sid>'` - Triggered when leaving the given chapter
@@ -120,8 +122,9 @@ difference between a reset, return to map, or save and quit. To get around this,
 leaving the chapter is *expected.* Generally you'll want to define an event that happens right before you leave, then 
 the leave event. This ensures that resetting any time outside that window will trigger a proper reset.
 
-Here's what the reset for the 1A might look like:
+Here's what the RTM for the 1A heart might look like:
 ```json
+"reset": "leave chapter",
 "route": [
     "enter chapter 1 ## Start",
     "5 > 6 ## Crossing",
@@ -134,6 +137,4 @@ Here's what the reset for the 1A might look like:
 
 The reason we put `!collect heart` before `!leave chapter` is because any time that SwiftSplit is waiting for you to 
 leave the chapter *you can not reset the run.* Any attempt to reset the run will just result in progressing through 
-the route. By putting the collect heart event before the leave chapter event we make sure that SwiftSplit only starts 
-waiting for the leave event right before we do it. You could stand two pixels away from the heart and restart the 
-chapter, and SwiftSplit would *still* recognize it as a reset.
+the route. 
