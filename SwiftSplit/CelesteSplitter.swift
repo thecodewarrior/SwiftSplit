@@ -381,7 +381,7 @@ class CelesteSplitter {
                         server.split()
                     }
                     
-                    nextEventIndex += 1
+                    nextEventIndex = (nextEventIndex + 1) % routeConfig.route.count
                     continue route
                 }
             }
